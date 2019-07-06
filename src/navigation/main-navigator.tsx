@@ -3,27 +3,53 @@ import {
   createMaterialTopTabNavigator,
   createStackNavigator,
 } from 'react-navigation'
-import { NoteScreen } from '../screens/note'
-import { DiscussionListScreen } from '../screens/discussion-list'
 import { AdListScreen } from '../screens/ad-list'
+import { DiscussionListScreen } from '../screens/discussion-list'
+import { NoteScreen } from '../screens/note'
 
 export const MainNavigator = observer(
-  createMaterialTopTabNavigator({
-    Discussion: createStackNavigator({
-      DiscussionList: {
-        screen: DiscussionListScreen,
+  createMaterialTopTabNavigator(
+    {
+      Discussion: {
+        screen: createStackNavigator({
+          DiscussionList: {
+            screen: DiscussionListScreen,
+          },
+          Note: {
+            screen: NoteScreen,
+          },
+        }),
+        navigationOptions: { title: 'Актуальное' },
       },
-      Note: {
-        screen: NoteScreen,
+      Ads: {
+        screen: createStackNavigator({
+          AdList: {
+            screen: AdListScreen,
+          },
+          Note: {
+            screen: NoteScreen,
+          },
+        }),
+        navigationOptions: { title: 'Объявления рядом' },
       },
-    }),
-    Ads: createStackNavigator({
-      AdList: {
-        screen: AdListScreen,
+    },
+    {
+      tabBarOptions: {
+        labelStyle: {
+          fontSize: 20,
+          fontFamily: 'IBMPlexSans-Bold',
+          color: '#000',
+        },
+        style: {
+          backgroundColor: '#FFF',
+        },
+          activeTintColor: '#828282',
+          inactiveTintColor: '#333',
+        indicatorStyle: {
+          width: 0,
+        },
+        scrollEnabled: true,
       },
-      Note: {
-        screen: NoteScreen,
-      },
-    }),
-  }),
+    },
+  ),
 )

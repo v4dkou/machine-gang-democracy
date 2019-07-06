@@ -78,7 +78,7 @@ export class ScreenContainer extends Component<ScreenContainerProps> {
     return (
       <SafeAreaView style={styles.flex}>
         <StatusBar
-          backgroundColor={this.props.backgroundColor || T.color.primaryDark}
+          backgroundColor={this.props.backgroundColor || '#FFF'}
           barStyle={this.props.barStyle || 'dark-content'}
         />
         <View style={[this.props.style, styles.centerContent]}>
