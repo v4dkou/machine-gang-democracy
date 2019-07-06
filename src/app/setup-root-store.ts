@@ -3,6 +3,19 @@ import * as storage from '../../components/storage'
 import { Reactotron } from '../services/reactotron'
 import { Environment } from './environment'
 import { RootStore, RootStoreModel } from './root-store'
+import {
+  AnnouncementsApi,
+  Configuration,
+  DiscussionTopicsApi,
+  InitiativesApi,
+  JwtLoginApi,
+  MessagesApi, TOKEN_KEY,
+  UserDevicesApi,
+  UsersApi,
+} from '../services/api'
+import { BASE_PATH, DEFAULT_HEADERS } from '../services/api/base'
+import { loadString } from '../../components/storage'
+import { ACCESS_TOKEN_PREF_KEY } from '../stores/user-store'
 // import firebase from 'react-native-firebase'
 
 /**
@@ -18,7 +31,14 @@ export async function setupRootStore() {
   let data: any
 
   // prepare the environment that will be associated with the RootStore.
-  const env = await createEnvironment()
+  const oldToken = await loadString(ACCESS_TOKEN_PREF_KEY)
+  const env = await createEnvironment(() => {
+    return (
+      (rootStore && rootStore.userStore.accessToken
+        ? rootStore.userStore.accessToken.valueOf()
+        : undefined) || oldToken
+    )
+  })
   try {
     // load data from storage
     data = (await storage.load(ROOT_STATE_STORAGE_KEY)) || {}
@@ -56,11 +76,36 @@ export async function setupRootStore() {
  * of the models that get created later. This is how we loosly couple things
  * like events between models.
  */
-export async function createEnvironment() {
+export async function createEnvironment(getToken: () => string) {
   const env = new Environment()
 
   // create each service
   env.reactotron = new Reactotron()
+
+  // TODO: JWT Expiration
+  const apiConfig: Configuration = {
+    basePath: BASE_PATH,
+    get baseOptions() {
+      const token = getToken()
+      const headers = { ...DEFAULT_HEADERS }
+      if (token) {
+        headers[TOKEN_KEY] = `JWT ${token}`
+      }
+      return {
+        headers,
+      }
+    },
+  }
+
+  env.api = {
+    login: new JwtLoginApi(apiConfig),
+    users: new UsersApi(apiConfig),
+    discussions: new DiscussionTopicsApi(apiConfig),
+    messages: new MessagesApi(apiConfig),
+    announcements: new AnnouncementsApi(apiConfig),
+    initiatives: new InitiativesApi(apiConfig),
+    devices: new UserDevicesApi(apiConfig),
+  }
 
   // env.fcm = firebase.messaging()
 

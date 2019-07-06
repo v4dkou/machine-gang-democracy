@@ -9,7 +9,7 @@ import {
   renderErrorView,
 } from '../../components/design/flat-alert'
 import { NavigationStore } from '../../components/navigation/navigation-store'
-import { DiscussionTopic } from '../services/api/api'
+import { DiscussionTopic } from '../services/api'
 import { DiscussionStore } from '../stores/discussion-store'
 import {
   emptyNavigationOptions,
@@ -81,6 +81,10 @@ export class DiscussionListScreen extends Component<DiscussionListProps> {
 
   public readonly viewModel = new DiscussionListViewModel(this.props.discussionStore)
 
+  public loadNextPage = () => {
+    this.viewModel.loadNextPage()
+  }
+
   public renderDiscussionList = (discussionList: DiscussionTopic[]) => (
     <SectionList
       contentContainerStyle={styles.contentContainerStyle}
@@ -88,6 +92,7 @@ export class DiscussionListScreen extends Component<DiscussionListProps> {
       renderItem={this.renderItem}
       endFillColor={styles.contentContainerStyle.backgroundColor}
       keyExtractor={DiscussionListScreen.keyExtractor}
+      onEndReached={this.loadNextPage}
     />
   )
 

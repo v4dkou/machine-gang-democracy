@@ -1,9 +1,13 @@
-import { Provider } from 'mobx-react'
+import { autorun, IReactionDisposer } from 'mobx'
+import { disposeOnUnmount, Provider } from 'mobx-react'
 import { contains } from 'ramda'
 import React, { Component } from 'react'
 import { StatefulNavigator } from '../../components/navigation'
 import { BackButtonHandler } from '../../components/navigation/back-button-handler'
+import { ConnectionError } from '../../components/utils/error-utils'
+import { showLongToast } from '../../components/utils/toast-utils'
 import { DEFAULT_NAVIGATION_CONFIG } from '../navigation/navigation-config'
+import { T } from '../style/values'
 import { RootStore } from './root-store'
 import { setupRootStore } from './setup-root-store'
 
@@ -16,10 +20,44 @@ export default class App extends Component<Props, RootComponentState> {
   public static canExit(routeName: string) {
     return contains(routeName, DEFAULT_NAVIGATION_CONFIG.exitRoutes)
   }
+  @disposeOnUnmount
+  private unauthorizedDisposer: IReactionDisposer
   public async componentDidMount() {
-    this.setState({
-      rootStore: await setupRootStore(),
-    })
+    this.setState(
+      {
+        rootStore: await setupRootStore(),
+      },
+      () => {
+        const nextSetup = () => {
+          const {
+            userStore,
+            // messagesStore,
+            navigationStore,
+          } = this.state.rootStore
+
+          // messagesStore.setupMessages(); TODO: Initialize data preload here
+
+          const isUnauthorized = (err: ConnectionError) =>
+            err && err.unauthorized
+          this.unauthorizedDisposer = autorun(() => {
+            const hadUnauthorized = isUnauthorized(userStore.loginError)
+            // || isUnauthorized(messagesStore.error) TODO: Check other 401s
+
+            if (userStore.isLogged && hadUnauthorized) {
+              console.tron.warn('Triggered 401')
+              showLongToast(T.string.token_expired)
+              userStore.clearUser()
+              navigationStore.navigateTo('Login') // TODO: Return user after authorization
+            }
+          })
+        }
+
+        this.state.rootStore.userStore
+          .setupUser()
+          .then(nextSetup)
+          .catch(nextSetup)
+      },
+    )
   }
 
   public render() {

@@ -2,21 +2,15 @@ import { action, mst, shim } from 'classy-mst'
 import { getEnv, Instance, types } from 'mobx-state-tree'
 // import { loadString, saveString } from '../../components/storage'
 import { formError } from '../../components/utils/error-utils'
-import promiseTimer from '../../components/utils/promise-timer'
 import { Environment } from '../app/environment'
-import { Discussion } from '../services/api/discussion'
+import { DiscussionTopic } from '../services/api'
 import { T } from '../style/values'
 
 // tslint:disable-next-line:variable-name
 const DiscussionStoreData = types.model({
-  discussionList: types.array(types.frozen<Discussion>()),
+  discussionList: types.array(types.frozen<DiscussionTopic>()),
+  nextPageToken: types.optional(types.string, '')
 })
-
-// tslint:disable-next-line:variable-name
-const DemoDiscussion = {
-  id: 11,
-  description: 'Description',
-} as Discussion
 
 class DiscussionActions extends shim(DiscussionStoreData) {
   // @ts-ignore
@@ -26,22 +20,60 @@ class DiscussionActions extends shim(DiscussionStoreData) {
 
   public async fetchDiscussionList() {
     try {
-      // await this.env.fcm.requestPermission()
-      // const token = await this.env.fcm.getToken()
-      // console.warn(JSON.stringify(token))
-      await promiseTimer(2000)
-      this.setDiscussionList([DemoDiscussion])
+      const options = { query: { page_size: 7 } } as any
+
+      const data = await this.env.api.discussions.discussionTopicsList(options)
+
+      if (data.data.next) {
+        this.setNextPageToken(data.data.next)
+      }
+      this.setDiscussionList(data.data.results)
     } catch (error) {
       console.tron.log(`DiscussionList error: ${JSON.stringify(error)}`)
       throw formError(error, T.string.get_note_list_error)
     }
   }
 
+  public async fetchNextPageDiscussionList() {
+    if (!this.nextPageToken) {
+      return
+    }
+
+    const options = {
+      query: {
+        page_size: 7,
+        maxid: this.nextPageToken
+      }
+    } as any
+
+    this.setNextPageToken('')
+
+    console.tron.log(JSON.stringify(options))
+
+    const data = await this.env.api.discussions.discussionTopicsList(options)
+
+    this.setNextPageToken(data.data.next || '')
+    this.updateDiscussionList(data.data.results)
+  }
+
   @action
-  public setDiscussionList(discussionList: Discussion[]) {
+  public setNextPageToken(nextPageToken?: string) {
+    this.nextPageToken = nextPageToken
+  }
+
+  @action
+  public setDiscussionList(discussionList: DiscussionTopic[]) {
     this.discussionList.clear()
+
     discussionList.forEach(item => {
-      this.discussionList.unshift({ ...item })
+      this.discussionList.push({ ...item })
+    })
+  }
+
+  @action
+  public updateDiscussionList(discussionList: DiscussionTopic[]) {
+    discussionList.forEach(item => {
+      this.discussionList.push({ ...item })
     })
   }
 

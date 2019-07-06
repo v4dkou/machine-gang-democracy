@@ -17,4 +17,11 @@ export class DiscussionListViewModel {
       .then(this.discussionListRequest.setData)
       .catch(this.discussionListRequest.setError)
   }
+
+  public loadNextPage = () => {
+    this.discussionStore
+      .fetchNextPageDiscussionList()
+      .then(this.discussionListRequest.setData)
+      .catch(this.discussionListRequest.setError)
+  }
 }

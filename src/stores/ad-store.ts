@@ -27,9 +27,9 @@ class AdActions extends shim(AdStoreData) {
 
   public async fetchAdList() {
     try {
-      await this.env.fcm.requestPermission()
-      const token = await this.env.fcm.getToken()
-      console.warn(JSON.stringify(token))
+      // await this.env.fcm.requestPermission()
+      // const token = await this.env.fcm.getToken()
+      // console.warn(JSON.stringify(token))
       await promiseTimer(2000)
       this.setAdList([DemoAd])
     } catch (error) {
