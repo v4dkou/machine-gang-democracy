@@ -195,6 +195,12 @@ export interface DiscussionTopic {
     description: string;
     /**
      *
+     * @type {string}
+     * @memberof DiscussionTopic
+     */
+    image?: string | null;
+    /**
+     *
      * @type {boolean}
      * @memberof DiscussionTopic
      */
@@ -364,8 +370,33 @@ export interface InlineResponse200 {
     previous?: string | null;
     /**
      *
-     * @type {Array<DiscussionTopic>}
+     * @type {Array<Advertisement>}
      * @memberof InlineResponse200
+     */
+    results: Array<Advertisement>;
+}
+/**
+ *
+ * @export
+ * @interface InlineResponse2001
+ */
+export interface InlineResponse2001 {
+    /**
+     *
+     * @type {string}
+     * @memberof InlineResponse2001
+     */
+    next?: string | null;
+    /**
+     *
+     * @type {string}
+     * @memberof InlineResponse2001
+     */
+    previous?: string | null;
+    /**
+     *
+     * @type {Array<DiscussionTopic>}
+     * @memberof InlineResponse2001
      */
     results: Array<DiscussionTopic>;
 }
@@ -659,10 +690,12 @@ export const AdvertisementsApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          *
+         * @param {string} [maxid] The pagination cursor value.
+         * @param {number} [pageSize] Number of results to return per page.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        advertisementsList(options: any = {}): RequestArgs {
+        advertisementsList(maxid?: string, pageSize?: number, options: any = {}): RequestArgs {
             const localVarPath = `/advertisements/`;
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
@@ -677,6 +710,14 @@ export const AdvertisementsApiAxiosParamCreator = function (configuration?: Conf
             // http basic authentication required
             if (configuration && (configuration.username || configuration.password)) {
                 localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+
+            if (maxid !== undefined) {
+                localVarQueryParameter['maxid'] = maxid;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page_size'] = pageSize;
             }
 
 
@@ -714,11 +755,13 @@ export const AdvertisementsApiFp = function(configuration?: Configuration) {
         },
         /**
          *
+         * @param {string} [maxid] The pagination cursor value.
+         * @param {number} [pageSize] Number of results to return per page.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        advertisementsList(options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Advertisement>> {
-            const localVarAxiosArgs = AdvertisementsApiAxiosParamCreator(configuration).advertisementsList(options);
+        advertisementsList(maxid?: string, pageSize?: number, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200> {
+            const localVarAxiosArgs = AdvertisementsApiAxiosParamCreator(configuration).advertisementsList(maxid, pageSize, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -744,11 +787,13 @@ export const AdvertisementsApiFactory = function (configuration?: Configuration,
         },
         /**
          *
+         * @param {string} [maxid] The pagination cursor value.
+         * @param {number} [pageSize] Number of results to return per page.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        advertisementsList(options?: any) {
-            return AdvertisementsApiFp(configuration).advertisementsList(options)(axios, basePath);
+        advertisementsList(maxid?: string, pageSize?: number, options?: any) {
+            return AdvertisementsApiFp(configuration).advertisementsList(maxid, pageSize, options)(axios, basePath);
         },
     };
 };
@@ -773,12 +818,14 @@ export class AdvertisementsApi extends BaseAPI {
 
     /**
      *
+     * @param {string} [maxid] The pagination cursor value.
+     * @param {number} [pageSize] Number of results to return per page.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdvertisementsApi
      */
-    public advertisementsList(options?: any) {
-        return AdvertisementsApiFp(this.configuration).advertisementsList(options)(this.axios, this.basePath);
+    public advertisementsList(maxid?: string, pageSize?: number, options?: any) {
+        return AdvertisementsApiFp(this.configuration).advertisementsList(maxid, pageSize, options)(this.axios, this.basePath);
     }
 
 }
