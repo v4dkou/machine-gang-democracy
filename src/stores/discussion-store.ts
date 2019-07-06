@@ -4,70 +4,70 @@ import { getEnv, Instance, types } from 'mobx-state-tree'
 import { formError } from '../../components/utils/error-utils'
 import promiseTimer from '../../components/utils/promise-timer'
 import { Environment } from '../app/environment'
-import { Note } from '../services/database/schemas/note'
+import { Discussion } from '../services/api/discussion'
 import { T } from '../style/values'
 
 // tslint:disable-next-line:variable-name
-const NoteStoreData = types.model({
-  noteList: types.array(types.frozen<Note>()),
+const DiscussionStoreData = types.model({
+  discussionList: types.array(types.frozen<Discussion>()),
 })
 
 // tslint:disable-next-line:variable-name
-const DemoNote = {
+const DemoDiscussion = {
   id: 11,
   title: 'Title',
   description: 'Description',
-} as Note
+} as Discussion
 
-class NoteActions extends shim(NoteStoreData) {
+class DiscussionActions extends shim(DiscussionStoreData) {
   // @ts-ignore
   private get env() {
     return getEnv(this) as Environment
   }
 
-  public async fetchNoteList() {
+  public async fetchDiscussionList() {
     try {
       await this.env.fcm.requestPermission()
       const token = await this.env.fcm.getToken()
       console.warn(JSON.stringify(token))
       await promiseTimer(2000)
-      this.setNoteList([DemoNote])
+      this.setDiscussionList([DemoDiscussion])
     } catch (error) {
-      console.tron.log(`NoteList error: ${JSON.stringify(error)}`)
+      console.tron.log(`DiscussionList error: ${JSON.stringify(error)}`)
       throw formError(error, T.string.get_note_list_error)
     }
   }
 
   @action
-  public setNoteList(noteList: Note[]) {
-    this.noteList.clear()
-    noteList.forEach(item => {
-      this.noteList.unshift({ ...item })
+  public setDiscussionList(discussionList: Discussion[]) {
+    this.discussionList.clear()
+    discussionList.forEach(item => {
+      this.discussionList.unshift({ ...item })
     })
   }
 
   // @action
-  // private setNewNote(note: Note) {
+  // private setNewDiscussion(note: Discussion) {
   //   this.noteList.unshift({ ...note })
   // }
   //
   // @action
-  // private setUpdatingNote(note: Note) {
-  //   const updatedNotePosition = this.noteList.findIndex(
+  // private setUpdatingDiscussion(note: Discussion) {
+  //   const updatedDiscussionPosition = this.noteList.findIndex(
   //     item => item.id === note.id,
   //   )
-  //   if (updatedNotePosition >= 0) {
-  //     this.noteList[updatedNotePosition] = { ...note }
+  //   if (updatedDiscussionPosition >= 0) {
+  //     this.noteList[updatedDiscussionPosition] = { ...note }
   //   }
   // }
   //
   // @action
-  // private deleteNoteFromList(note: Note) {
+  // private deleteDiscussionFromList(note: Discussion) {
   //   this.noteList.remove(note)
   // }
 }
 
 // tslint:disable-next-line:variable-name
-export const NoteStoreModel = mst(NoteActions, NoteStoreData, 'NoteStore')
+export const DiscussionStoreModel = mst(DiscussionActions, DiscussionStoreData, 'DiscussionStore')
 
-export type NoteStore = Instance<typeof NoteStoreModel>
+export type DiscussionStore = Instance<typeof DiscussionStoreModel>

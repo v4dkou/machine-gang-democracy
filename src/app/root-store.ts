@@ -1,7 +1,8 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
 import { getNavigationStoreModel } from '../../components/navigation/navigation-store'
 import { DEFAULT_STATE, RootNavigator } from '../navigation/root-navigator'
-import { NoteStoreModel } from '../stores/note-store'
+import { AdStoreModel } from '../stores/ad-store'
+import { DiscussionStoreModel } from '../stores/discussion-store'
 import {UserStoreModel} from '../stores/user-store';
 
 /**
@@ -10,7 +11,8 @@ import {UserStoreModel} from '../stores/user-store';
 // tslint:disable-next-line:variable-name
 export const RootStoreModel = types.model('RootStore').props({
   navigationStore: getNavigationStoreModel(RootNavigator, DEFAULT_STATE),
-  noteStore: NoteStoreModel,
+  adStore: AdStoreModel,
+  discussionStore: DiscussionStoreModel,
   userStore: UserStoreModel,
 })
 

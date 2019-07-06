@@ -9,14 +9,14 @@ import {
   renderErrorView,
 } from '../../components/design/flat-alert'
 import { NavigationStore } from '../../components/navigation/navigation-store'
-import { Note } from '../services/database/schemas/note'
-import { NoteStore } from '../stores/note-store'
+import { Discussion } from '../services/api/discussion'
+import { DiscussionStore } from '../stores/discussion-store'
 import {
-  createBasicNavigationOptions,
+  emptyNavigationOptions,
   ScreenContainer,
 } from '../style/navigation'
 import { T } from '../style/values'
-import { NoteListViewModel } from '../view-models/note-list'
+import { DiscussionListViewModel } from '../view-models/discussion-list'
 import { buttonProps } from '../views/button'
 import { routeToNote } from './note'
 
@@ -36,43 +36,42 @@ const styles = StyleSheet.create({
   },
 })
 
-interface NoteListProps {
-  noteStore?: NoteStore
+interface DiscussionListProps {
+  discussionStore?: DiscussionStore
   navigationStore?: NavigationStore
 }
 
-@inject('noteStore')
+@inject('discussionStore')
 @inject('navigationStore')
 @observer
-export class NoteListScreen extends Component<NoteListProps> {
-  public static navigationOptions = () =>
-    createBasicNavigationOptions('Список заметок')
+export class DiscussionListScreen extends Component<DiscussionListProps> {
+  public static navigationOptions = emptyNavigationOptions
 
-  public static keyExtractor(item: Note) {
+  public static keyExtractor(item: Discussion) {
     return item.id.toString()
   }
 
-  public readonly viewModel = new NoteListViewModel(this.props.noteStore)
+  public readonly viewModel = new DiscussionListViewModel(this.props.discussionStore)
 
-  public renderNoteList = (noteList: Note[]) => (
+  public renderDiscussionList = (noteList: Discussion[]) => (
     <SectionList
       sections={[{ data: noteList }]}
       renderItem={this.renderItem}
-      keyExtractor={NoteListScreen.keyExtractor}
+      keyExtractor={DiscussionListScreen.keyExtractor}
     />
   )
 
-  public renderItem = ({ item }: { item: Note }) => (
+  public renderItem = ({ item }: { item: Discussion }) => (
     <TouchableRipple style={styles.item} onPress={this.routeToNote(item)}>
       <Text>{item.title}</Text>
     </TouchableRipple>
   )
 
-  public routeToNote = (note: Note) => () => {
+  public routeToNote = (note: Discussion) => () => {
     routeToNote(this.props.navigationStore, note)
   }
 
-  public routeToCreateNote = () => {
+  public routeToCreateDiscussion = () => {
     routeToNote(this.props.navigationStore)
   }
 
@@ -80,23 +79,23 @@ export class NoteListScreen extends Component<NoteListProps> {
     return (
       <ScreenContainer>
         <ContentState
-          isFetching={this.viewModel.noteListRequest.isFetching}
-          error={this.viewModel.noteListRequest.error}
+          isFetching={this.viewModel.discussionListRequest.isFetching}
+          error={this.viewModel.discussionListRequest.error}
           dataSource={
-            this.props.noteStore.noteList
-              ? this.props.noteStore.noteList.slice()
+            this.props.discussionStore.discussionList
+              ? this.props.discussionStore.discussionList.slice()
               : null
           }
-          renderData={this.renderNoteList}
+          renderData={this.renderDiscussionList}
           renderEmpty={renderEmptyView(
             T.string.note_list_empty,
-            this.viewModel.loadNoteList,
+            this.viewModel.loadDiscussionList,
             null,
             null,
             buttonProps,
           )}
           renderError={renderErrorView(
-            this.viewModel.loadNoteList,
+            this.viewModel.loadDiscussionList,
             null,
             null,
             buttonProps,
@@ -106,7 +105,7 @@ export class NoteListScreen extends Component<NoteListProps> {
           style={styles.fab}
           icon="add"
           color={'white'}
-          onPress={this.routeToCreateNote}
+          onPress={this.routeToCreateDiscussion}
         />
       </ScreenContainer>
     )

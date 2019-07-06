@@ -29,6 +29,16 @@ export function createBasicNavigationOptions(
   }
 }
 
+/**
+ * Пустой navbar для экрана
+ * @param {string} title Заголовок сцены
+ * @param {string} icons Иконки в ActionBar'е
+ * @return {{title: *, headerStyle: {backgroundColor: string}, headerTitleStyle: {color: string}, headerTintColor: string}}
+ */
+export const emptyNavigationOptions: NavigationScreenOptions = {
+  header: null,
+}
+
 const styles = StyleSheet.create({
   flex: {
     flex: 1,

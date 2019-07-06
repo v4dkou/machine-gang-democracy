@@ -16,6 +16,7 @@ import { showLongToast } from '../../components/utils/toast-utils'
 import { UserStore } from '../stores/user-store'
 import { T } from '../style/values'
 import { validators } from './validation'
+import { NavigationStore } from '../../components/navigation/navigation-store'
 
 const ANIM_TIMINGS = {
   delay_1: 300,
@@ -29,7 +30,8 @@ const ANIM_TIMINGS = {
 }
 
 interface LoginProps {
-  userStore: UserStore
+  userStore?: UserStore
+  navigationStore?: NavigationStore
 }
 
 type AnimTypes = 'zoomIn' | 'bounceInUp' | 'zoomOut' | 'bounceOutDown'
@@ -59,6 +61,7 @@ type LoginState = {
 } & LoginChangeableAnims
 
 @inject('userStore')
+@inject('navigationStore')
 @observer
 export default class Login extends Component<LoginProps, LoginState> {
   public state = {
@@ -81,6 +84,7 @@ export default class Login extends Component<LoginProps, LoginState> {
 
   @disposeOnUnmount
   public loginErrorDisposer
+  public loginSuccessDisposer
 
   public componentDidMount() {
     this.loginErrorDisposer = reaction(
@@ -88,6 +92,16 @@ export default class Login extends Component<LoginProps, LoginState> {
       error => {
         if (error) {
           showLongToast('Please, check your username and password')
+        }
+      },
+    )
+
+    this.loginSuccessDisposer = reaction(
+      () => this.props.userStore.user,
+      user => {
+        console.tron.warn(JSON.stringify(user))
+        if (user) {
+          this.props.navigationStore.navigateTo('Discussion')
         }
       },
     )
@@ -141,12 +155,13 @@ export default class Login extends Component<LoginProps, LoginState> {
   public handleRegister = () => this.goTo('register')
   public handleBack = () => this.goTo('onboarding')
 
-  public onEmailInput = email => this.setState({ email })
+  public onEmailInput = email => this.setState({ email, errorEmail: '' })
 
   public onEmailBlur = () =>
     this.setState(validators.emailValidate(this.state.email))
 
-  public onPasswordInput = password => this.setState({ password })
+  public onPasswordInput = password =>
+    this.setState({ password, errorPassword: '' })
 
   public onPasswordBlur = () =>
     this.setState(validators.passwordValidate(this.state.password))
@@ -154,7 +169,7 @@ export default class Login extends Component<LoginProps, LoginState> {
   public onConfirmInput = confirm =>
     this.setState({
       confirm,
-      ...validators.confirmValidate(this.state.password, confirm),
+      errorConfirm: '',
     })
 
   public onConfirmBlur = () =>
@@ -381,7 +396,6 @@ export default class Login extends Component<LoginProps, LoginState> {
                 delay={ANIM_TIMINGS.delay_login_1}
                 duration={400}
               >
-                <Text style={styles.titleText_login}>Booking Ninjas</Text>
                 <View
                   style={styles.logoContainer_login}
                   animation={this.state.animationLogo_Login}
@@ -462,7 +476,6 @@ export default class Login extends Component<LoginProps, LoginState> {
           </SafeAreaView>
         )
     }
-    return <Text>kek</Text>
   }
 
   public render() {

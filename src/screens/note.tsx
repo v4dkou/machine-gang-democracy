@@ -8,7 +8,7 @@ import { NavigationStore } from '../../components/navigation/navigation-store'
 import { showLongToastOnError } from '../../components/utils/error-utils'
 import { showLongToast } from '../../components/utils/toast-utils'
 import { Note } from '../services/database/schemas/note'
-import { NoteStore } from '../stores/note-store'
+import { DiscussionStore } from '../stores/note-store'
 import {
   createBasicNavigationOptions,
   ScreenContainer,
@@ -33,11 +33,11 @@ const styles = StyleSheet.create({
 })
 
 interface NoteScreenProps extends NavigationScreenProps {
-  noteStore?: NoteStore
+  noteStore?: DiscussionStore
   navigationStore?: NavigationStore
 }
 
-@inject('noteStore')
+@inject('discussionStore')
 @inject('navigationStore')
 @observer
 export class NoteScreen extends Component<NoteScreenProps> {

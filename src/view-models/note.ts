@@ -4,7 +4,7 @@ import { FormField, validate } from '../../components/fields/form-field'
 import { StringEmptyOptions } from '../../components/fields/string-options'
 import { ConnectionError } from '../../components/utils/error-utils'
 import { Note } from '../services/database/schemas/note'
-import { NoteStore } from '../stores/note-store'
+import { DiscussionStore } from '../stores/note-store'
 import { T } from '../style/values'
 
 export class NoteViewModel {
@@ -24,7 +24,7 @@ export class NoteViewModel {
     ConnectionError
   >()
 
-  constructor(private readonly noteStore: NoteStore, noteId: number) {
+  constructor(private readonly noteStore: DiscussionStore, noteId: number) {
     this.noteId = noteId
     this.updateNoteData()
   }
