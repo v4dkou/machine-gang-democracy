@@ -107,9 +107,9 @@ export default class Login extends Component<LoginProps, LoginState> {
     )
   }
 
-  public login = () => {
+  public login = async () => {
     if (this.handleVerifyLogin()) {
-      this.props.userStore.login(this.state.email, this.state.password)
+      await this.props.userStore.login(this.state.email, this.state.password)
     }
   }
 

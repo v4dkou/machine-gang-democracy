@@ -9,7 +9,7 @@ import {
   renderErrorView,
 } from '../../components/design/flat-alert'
 import { NavigationStore } from '../../components/navigation/navigation-store'
-import { Discussion } from '../services/api/discussion'
+import { DiscussionTopic } from '../services/api'
 import { DiscussionStore } from '../stores/discussion-store'
 import {
   emptyNavigationOptions,
@@ -47,13 +47,13 @@ interface DiscussionListProps {
 export class DiscussionListScreen extends Component<DiscussionListProps> {
   public static navigationOptions = emptyNavigationOptions
 
-  public static keyExtractor(item: Discussion) {
+  public static keyExtractor(item: DiscussionTopic) {
     return item.id.toString()
   }
 
   public readonly viewModel = new DiscussionListViewModel(this.props.discussionStore)
 
-  public renderDiscussionList = (noteList: Discussion[]) => (
+  public renderDiscussionList = (noteList: DiscussionTopic[]) => (
     <SectionList
       sections={[{ data: noteList }]}
       renderItem={this.renderItem}
@@ -61,13 +61,13 @@ export class DiscussionListScreen extends Component<DiscussionListProps> {
     />
   )
 
-  public renderItem = ({ item }: { item: Discussion }) => (
+  public renderItem = ({ item }: { item: DiscussionTopic }) => (
     <TouchableRipple style={styles.item} onPress={this.routeToNote(item)}>
-      <Text>{item.title}</Text>
+      <Text>{item.announcement}</Text>
     </TouchableRipple>
   )
 
-  public routeToNote = (note: Discussion) => () => {
+  public routeToNote = (note: DiscussionTopic) => () => {
     routeToNote(this.props.navigationStore, note)
   }
 

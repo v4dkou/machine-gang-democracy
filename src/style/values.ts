@@ -16,6 +16,9 @@ export const T = {
     get_note_list_error: 'Не удалось получить список заметок',
     note_list_empty: 'Список заметок пуст',
 
+    get_user_error: 'Не удалось загрузить профиль',
+    token_expired: 'Пожалуйста, авторизуйтесь снова',
+
     // Edit/Show note
     empty_title_text: 'Введите название',
     empty_description_text: 'Введите описание',

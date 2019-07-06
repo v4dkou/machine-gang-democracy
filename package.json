@@ -24,7 +24,8 @@
     "react-native-vector-icons": "6.1.0",
     "react-navigation": "2.16.0",
     "reactotron-mst": "2.1.4",
-    "reactotron-react-native": "2.1.5"
+    "reactotron-react-native": "2.1.5",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "7.2.3",

@@ -2,22 +2,14 @@ import { action, mst, shim } from 'classy-mst'
 import { getEnv, Instance, types } from 'mobx-state-tree'
 // import { loadString, saveString } from '../../components/storage'
 import { formError } from '../../components/utils/error-utils'
-import promiseTimer from '../../components/utils/promise-timer'
 import { Environment } from '../app/environment'
-import { Discussion } from '../services/api/discussion'
+import { DiscussionTopic } from '../services/api'
 import { T } from '../style/values'
 
 // tslint:disable-next-line:variable-name
 const DiscussionStoreData = types.model({
-  discussionList: types.array(types.frozen<Discussion>()),
+  discussionList: types.array(types.frozen<DiscussionTopic>()),
 })
-
-// tslint:disable-next-line:variable-name
-const DemoDiscussion = {
-  id: 11,
-  title: 'Title',
-  description: 'Description',
-} as Discussion
 
 class DiscussionActions extends shim(DiscussionStoreData) {
   // @ts-ignore
@@ -27,11 +19,8 @@ class DiscussionActions extends shim(DiscussionStoreData) {
 
   public async fetchDiscussionList() {
     try {
-      await this.env.fcm.requestPermission()
-      const token = await this.env.fcm.getToken()
-      console.warn(JSON.stringify(token))
-      await promiseTimer(2000)
-      this.setDiscussionList([DemoDiscussion])
+      const data = await this.env.api.discussions.discussionTopicsList()
+      this.setDiscussionList(data.data)
     } catch (error) {
       console.tron.log(`DiscussionList error: ${JSON.stringify(error)}`)
       throw formError(error, T.string.get_note_list_error)
@@ -39,7 +28,7 @@ class DiscussionActions extends shim(DiscussionStoreData) {
   }
 
   @action
-  public setDiscussionList(discussionList: Discussion[]) {
+  public setDiscussionList(discussionList: DiscussionTopic[]) {
     this.discussionList.clear()
     discussionList.forEach(item => {
       this.discussionList.unshift({ ...item })
