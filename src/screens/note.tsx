@@ -8,6 +8,7 @@ import { NavigationStore } from '../../components/navigation/navigation-store'
 import { showLongToastOnError } from '../../components/utils/error-utils'
 import { showLongToast } from '../../components/utils/toast-utils'
 import { Note } from '../services/database/schemas/note'
+import { Discussion } from '../services/api/discussion'
 import { DiscussionStore } from '../stores/note-store'
 import {
   createBasicNavigationOptions,
@@ -220,4 +221,8 @@ export class NoteScreen extends Component<NoteScreenProps> {
 
 export function routeToNote(navStore: NavigationStore, note?: Note) {
   navStore.navigateTo('Note', note ? { noteId: note.id } : null)
+}
+
+export function routeToDiscussion(navStore: NavigationStore, discussion?: Discussion) {
+  navStore.navigateTo('Discussion', discussion ? { discussionId: discussion.id } : null)
 }

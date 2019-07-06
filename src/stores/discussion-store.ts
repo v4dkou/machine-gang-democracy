@@ -15,7 +15,6 @@ const DiscussionStoreData = types.model({
 // tslint:disable-next-line:variable-name
 const DemoDiscussion = {
   id: 11,
-  title: 'Title',
   description: 'Description',
 } as Discussion
 
@@ -27,9 +26,9 @@ class DiscussionActions extends shim(DiscussionStoreData) {
 
   public async fetchDiscussionList() {
     try {
-      await this.env.fcm.requestPermission()
-      const token = await this.env.fcm.getToken()
-      console.warn(JSON.stringify(token))
+      // await this.env.fcm.requestPermission()
+      // const token = await this.env.fcm.getToken()
+      // console.warn(JSON.stringify(token))
       await promiseTimer(2000)
       this.setDiscussionList([DemoDiscussion])
     } catch (error) {

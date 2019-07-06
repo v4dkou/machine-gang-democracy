@@ -18,7 +18,7 @@ import {
 import { T } from '../style/values'
 import { DiscussionListViewModel } from '../view-models/discussion-list'
 import { buttonProps } from '../views/button'
-import { routeToNote } from './note'
+import { routeToDiscussion } from './note'
 
 const styles = StyleSheet.create({
   fab: {
@@ -62,17 +62,17 @@ export class DiscussionListScreen extends Component<DiscussionListProps> {
   )
 
   public renderItem = ({ item }: { item: Discussion }) => (
-    <TouchableRipple style={styles.item} onPress={this.routeToNote(item)}>
-      <Text>{item.title}</Text>
+    <TouchableRipple style={styles.item} onPress={this.routeToDiscussion(item)}>
+      <Text>{item.description}</Text>
     </TouchableRipple>
   )
 
-  public routeToNote = (note: Discussion) => () => {
-    routeToNote(this.props.navigationStore, note)
+  public routeToDiscussion = (note: Discussion) => () => {
+    routeToDiscussion(this.props.navigationStore, note)
   }
 
   public routeToCreateDiscussion = () => {
-    routeToNote(this.props.navigationStore)
+    routeToDiscussion(this.props.navigationStore)
   }
 
   public render() {
