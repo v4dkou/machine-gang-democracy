@@ -8,6 +8,8 @@ export const T = {
     primaryDark: '#000',
     accent: '#CC8800',
     background: '#F0F0F0',
+    white: '#FFF',
+    black: '#000'
   },
   string: {
     welcome_subtitle: 'Сколько нужно соседей, чтобы вкрутить лампочку?',

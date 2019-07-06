@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 
 import { inject, observer } from 'mobx-react'
-import { SectionList, StyleSheet, Text } from 'react-native'
-import { FAB, TouchableRipple } from 'react-native-paper'
+import { SectionList, StyleSheet } from 'react-native'
+import { FAB, Title, Paragraph, Card } from 'react-native-paper'
 import ContentState from '../../components/content-state'
 import {
   renderEmptyView,
   renderErrorView,
 } from '../../components/design/flat-alert'
 import { NavigationStore } from '../../components/navigation/navigation-store'
-import { Discussion } from '../services/api/discussion'
+import { DiscussionTopic } from '../services/api/api'
 import { DiscussionStore } from '../stores/discussion-store'
 import {
   emptyNavigationOptions,
@@ -24,16 +24,44 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     margin: T.spacing.default,
-    backgroundColor: T.color.accent,
+    backgroundColor: T.color.white,
     right: 0,
     bottom: 0,
   },
-  item: {
-    paddingStart: T.spacing.default,
-    paddingEnd: T.spacing.default,
-    paddingTop: T.spacing.small,
-    paddingBottom: T.spacing.small,
+  contentContainerStyle: {
+    paddingHorizontal: 20,
+    paddingTop: 5,
+    paddingBottom: 20,
+    backgroundColor: '#F8EEE4'
   },
+  item: {
+    marginTop: 15,
+    paddingVertical: 0,
+    elevation: 7,
+    borderRadius: 10
+  },
+  itemAlert: {
+    backgroundColor: '#F27B3B'
+  },
+  itemContent: {
+    paddingVertical: T.spacing.default,
+    paddingHorizontal: T.spacing.default
+  },
+  itemTitle: {
+    margin: 0,
+    lineHeight: 16,
+    color: T.color.black,
+    fontWeight: 'bold',
+    fontSize: 12,
+    textTransform: 'uppercase'
+  },
+  itemText: {
+    padding: 0,
+    fontSize: 16
+  },
+  itemTextAlert: {
+    color: T.color.white
+  }
 })
 
 interface DiscussionListProps {
@@ -47,28 +75,38 @@ interface DiscussionListProps {
 export class DiscussionListScreen extends Component<DiscussionListProps> {
   public static navigationOptions = emptyNavigationOptions
 
-  public static keyExtractor(item: Discussion) {
+  public static keyExtractor(item: DiscussionTopic) {
     return item.id.toString()
   }
 
   public readonly viewModel = new DiscussionListViewModel(this.props.discussionStore)
 
-  public renderDiscussionList = (noteList: Discussion[]) => (
+  public renderDiscussionList = (discussionList: DiscussionTopic[]) => (
     <SectionList
-      sections={[{ data: noteList }]}
+      contentContainerStyle={styles.contentContainerStyle}
+      sections={[{ data: discussionList }]}
       renderItem={this.renderItem}
+      endFillColor={styles.contentContainerStyle.backgroundColor}
       keyExtractor={DiscussionListScreen.keyExtractor}
     />
   )
 
-  public renderItem = ({ item }: { item: Discussion }) => (
-    <TouchableRipple style={styles.item} onPress={this.routeToDiscussion(item)}>
-      <Text>{item.description}</Text>
-    </TouchableRipple>
+  public renderItem = ({ item }: { item: DiscussionTopic }) => (
+    <Card style={[styles.item, item.alert && styles.itemAlert]} onPress={this.routeToDiscussion(item)}>
+      <Card.Content style={styles.itemContent}>
+        {(item.initiative && item.status === 'voting') &&
+          <Title style={[styles.itemTitle, item.alert && styles.itemTextAlert]}>Голосование</Title>
+        }
+        {(item.initiative && item.status === 'new') &&
+          <Title style={[styles.itemTitle, item.alert && styles.itemTextAlert]}>Обсуждение</Title>
+        }
+        <Paragraph style={[styles.itemText, item.alert && styles.itemTextAlert]}>{item.description} ({item.user.username})</Paragraph>
+      </Card.Content>
+    </Card>
   )
 
-  public routeToDiscussion = (note: Discussion) => () => {
-    routeToDiscussion(this.props.navigationStore, note)
+  public routeToDiscussion = (discussion: DiscussionTopic) => () => {
+    routeToDiscussion(this.props.navigationStore, discussion)
   }
 
   public routeToCreateDiscussion = () => {
@@ -104,7 +142,7 @@ export class DiscussionListScreen extends Component<DiscussionListProps> {
         <FAB
           style={styles.fab}
           icon="add"
-          color={'white'}
+          color={T.color.accent}
           onPress={this.routeToCreateDiscussion}
         />
       </ScreenContainer>

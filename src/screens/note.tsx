@@ -8,8 +8,8 @@ import { NavigationStore } from '../../components/navigation/navigation-store'
 import { showLongToastOnError } from '../../components/utils/error-utils'
 import { showLongToast } from '../../components/utils/toast-utils'
 import { Note } from '../services/database/schemas/note'
-import { Discussion } from '../services/api/discussion'
-import { DiscussionStore } from '../stores/note-store'
+import { DiscussionTopic } from '../services/api/api'
+import { DiscussionStore } from '../stores/discussion-store'
 import {
   createBasicNavigationOptions,
   ScreenContainer,
@@ -223,6 +223,6 @@ export function routeToNote(navStore: NavigationStore, note?: Note) {
   navStore.navigateTo('Note', note ? { noteId: note.id } : null)
 }
 
-export function routeToDiscussion(navStore: NavigationStore, discussion?: Discussion) {
+export function routeToDiscussion(navStore: NavigationStore, discussion?: DiscussionTopic) {
   navStore.navigateTo('Discussion', discussion ? { discussionId: discussion.id } : null)
 }
