@@ -23,6 +23,111 @@ export const TOKEN_KEY = "Authorization";
 /**
  *
  * @export
+ * @interface Advertisement
+ */
+export interface Advertisement {
+    /**
+     *
+     * @type {AdvertisementSubcategory}
+     * @memberof Advertisement
+     */
+    subcategory: AdvertisementSubcategory;
+    /**
+     *
+     * @type {string}
+     * @memberof Advertisement
+     */
+    title: string;
+    /**
+     *
+     * @type {string}
+     * @memberof Advertisement
+     */
+    description: string;
+    /**
+     *
+     * @type {string}
+     * @memberof Advertisement
+     */
+    image?: string;
+    /**
+     *
+     * @type {number}
+     * @memberof Advertisement
+     */
+    price?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof Advertisement
+     */
+    range?: number;
+    /**
+     *
+     * @type {boolean}
+     * @memberof Advertisement
+     */
+    isPaid: boolean;
+    /**
+     *
+     * @type {number}
+     * @memberof Advertisement
+     */
+    paidPeriod?: number;
+}
+/**
+ *
+ * @export
+ * @interface AdvertisementCategory
+ */
+export interface AdvertisementCategory {
+    /**
+     *
+     * @type {number}
+     * @memberof AdvertisementCategory
+     */
+    id?: number;
+    /**
+     *
+     * @type {string}
+     * @memberof AdvertisementCategory
+     */
+    name?: string;
+    /**
+     *
+     * @type {Array<AdvertisementSubcategory>}
+     * @memberof AdvertisementCategory
+     */
+    subcategories?: Array<AdvertisementSubcategory>;
+    /**
+     *
+     * @type {string}
+     * @memberof AdvertisementCategory
+     */
+    promo?: string;
+}
+/**
+ *
+ * @export
+ * @interface AdvertisementSubcategory
+ */
+export interface AdvertisementSubcategory {
+    /**
+     *
+     * @type {number}
+     * @memberof AdvertisementSubcategory
+     */
+    id?: number;
+    /**
+     *
+     * @type {string}
+     * @memberof AdvertisementSubcategory
+     */
+    name?: string;
+}
+/**
+ *
+ * @export
  * @interface Announcement
  */
 export interface Announcement {
@@ -90,6 +195,12 @@ export interface DiscussionTopic {
     description: string;
     /**
      *
+     * @type {boolean}
+     * @memberof DiscussionTopic
+     */
+    alert?: boolean;
+    /**
+     *
      * @type {string}
      * @memberof DiscussionTopic
      */
@@ -118,12 +229,6 @@ export interface DiscussionTopic {
      * @memberof DiscussionTopic
      */
     dateUpdated?: Date;
-    /**
-     *
-     * @type {boolean}
-     * @memberof DiscussionTopic
-     */
-    alert?: boolean;
 }
 
 /**
@@ -239,6 +344,31 @@ export enum InitiativeProcessStepStatusEnum {
     Complete = 'complete'
 }
 
+/**
+ *
+ * @export
+ * @interface InlineResponse200
+ */
+export interface InlineResponse200 {
+    /**
+     *
+     * @type {string}
+     * @memberof InlineResponse200
+     */
+    next?: string | null;
+    /**
+     *
+     * @type {string}
+     * @memberof InlineResponse200
+     */
+    previous?: string | null;
+    /**
+     *
+     * @type {Array<DiscussionTopic>}
+     * @memberof InlineResponse200
+     */
+    results: Array<DiscussionTopic>;
+}
 /**
  *
  * @export
@@ -376,6 +506,281 @@ export enum UserDeviceDeviceTypeEnum {
     IosDev = 'ios-dev',
     Ios = 'ios',
     Gcm = 'gcm'
+}
+
+
+/**
+ * AdvertisementCategoriesApi - axios parameter creator
+ * @export
+ */
+export const AdvertisementCategoriesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        advertisementCategoriesList(options: any = {}): RequestArgs {
+            const localVarPath = `/advertisement_categories/`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Basic required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+
+
+                localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = {...baseOptions.headers, ...localVarHeaderParameter, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AdvertisementCategoriesApi - functional programming interface
+ * @export
+ */
+export const AdvertisementCategoriesApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        advertisementCategoriesList(options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AdvertisementCategory>> {
+            const localVarAxiosArgs = AdvertisementCategoriesApiAxiosParamCreator(configuration).advertisementCategoriesList(options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+    }
+};
+
+/**
+ * AdvertisementCategoriesApi - factory interface
+ * @export
+ */
+export const AdvertisementCategoriesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    return {
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        advertisementCategoriesList(options?: any) {
+            return AdvertisementCategoriesApiFp(configuration).advertisementCategoriesList(options)(axios, basePath);
+        },
+    };
+};
+
+/**
+ * AdvertisementCategoriesApi - object-oriented interface
+ * @export
+ * @class AdvertisementCategoriesApi
+ * @extends {BaseAPI}
+ */
+export class AdvertisementCategoriesApi extends BaseAPI {
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdvertisementCategoriesApi
+     */
+    public advertisementCategoriesList(options?: any) {
+        return AdvertisementCategoriesApiFp(this.configuration).advertisementCategoriesList(options)(this.axios, this.basePath);
+    }
+
+}
+
+
+/**
+ * AdvertisementsApi - axios parameter creator
+ * @export
+ */
+export const AdvertisementsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @param {Advertisement} data
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        advertisementsCreate(data: Advertisement, options: any = {}): RequestArgs {
+            // verify required parameter 'data' is not null or undefined
+            if (data === null || data === undefined) {
+                throw new RequiredError('data','Required parameter data was null or undefined when calling advertisementsCreate.');
+            }
+            const localVarPath = `/advertisements/`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Basic required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+
+
+                localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = {...baseOptions.headers, ...localVarHeaderParameter, ...options.headers};
+            const needsSerialization = (<any>"Advertisement" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(data !== undefined ? data : {}) : (data || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        advertisementsList(options: any = {}): RequestArgs {
+            const localVarPath = `/advertisements/`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Basic required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+
+
+                localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = {...baseOptions.headers, ...localVarHeaderParameter, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AdvertisementsApi - functional programming interface
+ * @export
+ */
+export const AdvertisementsApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         *
+         * @param {Advertisement} data
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        advertisementsCreate(data: Advertisement, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Advertisement> {
+            const localVarAxiosArgs = AdvertisementsApiAxiosParamCreator(configuration).advertisementsCreate(data, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        advertisementsList(options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Advertisement>> {
+            const localVarAxiosArgs = AdvertisementsApiAxiosParamCreator(configuration).advertisementsList(options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+    }
+};
+
+/**
+ * AdvertisementsApi - factory interface
+ * @export
+ */
+export const AdvertisementsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    return {
+        /**
+         *
+         * @param {Advertisement} data
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        advertisementsCreate(data: Advertisement, options?: any) {
+            return AdvertisementsApiFp(configuration).advertisementsCreate(data, options)(axios, basePath);
+        },
+        /**
+         *
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        advertisementsList(options?: any) {
+            return AdvertisementsApiFp(configuration).advertisementsList(options)(axios, basePath);
+        },
+    };
+};
+
+/**
+ * AdvertisementsApi - object-oriented interface
+ * @export
+ * @class AdvertisementsApi
+ * @extends {BaseAPI}
+ */
+export class AdvertisementsApi extends BaseAPI {
+    /**
+     *
+     * @param {Advertisement} data
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdvertisementsApi
+     */
+    public advertisementsCreate(data: Advertisement, options?: any) {
+        return AdvertisementsApiFp(this.configuration).advertisementsCreate(data, options)(this.axios, this.basePath);
+    }
+
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdvertisementsApi
+     */
+    public advertisementsList(options?: any) {
+        return AdvertisementsApiFp(this.configuration).advertisementsList(options)(this.axios, this.basePath);
+    }
+
 }
 
 
@@ -911,10 +1316,12 @@ export const DiscussionTopicsApiAxiosParamCreator = function (configuration?: Co
     return {
         /**
          *
+         * @param {string} [maxid] The pagination cursor value.
+         * @param {number} [pageSize] Number of results to return per page.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        discussionTopicsList(options: any = {}): RequestArgs {
+        discussionTopicsList(maxid?: string, pageSize?: number, options: any = {}): RequestArgs {
             const localVarPath = `/discussion_topics/`;
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
@@ -929,6 +1336,14 @@ export const DiscussionTopicsApiAxiosParamCreator = function (configuration?: Co
             // http basic authentication required
             if (configuration && (configuration.username || configuration.password)) {
                 localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+
+            if (maxid !== undefined) {
+                localVarQueryParameter['maxid'] = maxid;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page_size'] = pageSize;
             }
 
 
@@ -953,11 +1368,13 @@ export const DiscussionTopicsApiFp = function(configuration?: Configuration) {
     return {
         /**
          *
+         * @param {string} [maxid] The pagination cursor value.
+         * @param {number} [pageSize] Number of results to return per page.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        discussionTopicsList(options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DiscussionTopic>> {
-            const localVarAxiosArgs = DiscussionTopicsApiAxiosParamCreator(configuration).discussionTopicsList(options);
+        discussionTopicsList(maxid?: string, pageSize?: number, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200> {
+            const localVarAxiosArgs = DiscussionTopicsApiAxiosParamCreator(configuration).discussionTopicsList(maxid, pageSize, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -974,11 +1391,13 @@ export const DiscussionTopicsApiFactory = function (configuration?: Configuratio
     return {
         /**
          *
+         * @param {string} [maxid] The pagination cursor value.
+         * @param {number} [pageSize] Number of results to return per page.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        discussionTopicsList(options?: any) {
-            return DiscussionTopicsApiFp(configuration).discussionTopicsList(options)(axios, basePath);
+        discussionTopicsList(maxid?: string, pageSize?: number, options?: any) {
+            return DiscussionTopicsApiFp(configuration).discussionTopicsList(maxid, pageSize, options)(axios, basePath);
         },
     };
 };
@@ -992,12 +1411,14 @@ export const DiscussionTopicsApiFactory = function (configuration?: Configuratio
 export class DiscussionTopicsApi extends BaseAPI {
     /**
      *
+     * @param {string} [maxid] The pagination cursor value.
+     * @param {number} [pageSize] Number of results to return per page.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DiscussionTopicsApi
      */
-    public discussionTopicsList(options?: any) {
-        return DiscussionTopicsApiFp(this.configuration).discussionTopicsList(options)(this.axios, this.basePath);
+    public discussionTopicsList(maxid?: string, pageSize?: number, options?: any) {
+        return DiscussionTopicsApiFp(this.configuration).discussionTopicsList(maxid, pageSize, options)(this.axios, this.basePath);
     }
 
 }
@@ -2520,3 +2941,5 @@ export class UsersApi extends BaseAPI {
     }
 
 }
+
+
