@@ -2,6 +2,7 @@ import { Instance, SnapshotOut, types } from 'mobx-state-tree'
 import { getNavigationStoreModel } from '../../components/navigation/navigation-store'
 import { DEFAULT_STATE, RootNavigator } from '../navigation/root-navigator'
 import { NoteStoreModel } from '../stores/note-store'
+import {UserStoreModel} from '../stores/user-store';
 
 /**
  * An RootStore model.
@@ -10,6 +11,7 @@ import { NoteStoreModel } from '../stores/note-store'
 export const RootStoreModel = types.model('RootStore').props({
   navigationStore: getNavigationStoreModel(RootNavigator, DEFAULT_STATE),
   noteStore: NoteStoreModel,
+  userStore: UserStoreModel,
 })
 
 /**

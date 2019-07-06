@@ -4,12 +4,14 @@ export const T = {
     default: 16,
   },
   color: {
-    primary: '#0055CC',
-    primaryDark: '#0044C0',
+    primary: '#333',
+    primaryDark: '#000',
     accent: '#CC8800',
     background: '#F0F0F0',
   },
   string: {
+    welcome_subtitle: 'Сколько нужно соседей, чтобы вкрутить лампочку?',
+    welcome_forgot_password: 'Забыли пароль?',
     // Note list
     get_note_list_error: 'Не удалось получить список заметок',
     note_list_empty: 'Список заметок пуст',

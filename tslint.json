@@ -25,7 +25,8 @@
     },
     "ter-arrow-parens": [true, "as-needed"],
     "ter-func-call-spacing": [false],
-    "semicolon": [true, "never"]
+    "semicolon": [true, "never"],
+    "variable-name": false
   },
   "rulesDirectory": [
     "tslint-plugin-prettier"

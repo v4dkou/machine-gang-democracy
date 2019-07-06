@@ -4,46 +4,53 @@ import { getEnv, Instance, types } from 'mobx-state-tree'
 import { formError } from '../../components/utils/error-utils'
 import promiseTimer from '../../components/utils/promise-timer'
 import { Environment } from '../app/environment'
-import { Note } from '../services/database/schemas/note'
+import { User } from '../services/api/user'
 import { T } from '../style/values'
 
 // tslint:disable-next-line:variable-name
-const NoteStoreData = types.model({
-  noteList: types.array(types.frozen<Note>()),
+const UserStoreData = types.model({
+  isLogging: false,
+  user: types.frozen<User>(),
+  loginError: types.frozen(),
 })
 
 // tslint:disable-next-line:variable-name
-const DemoNote = {
+const DemoUser = {
   id: 11,
-  title: 'Title',
-  description: 'Description',
-} as Note
+  fullName: 'Title',
+  avatarUrl: 'Description',
+} as User
 
-class NoteActions extends shim(NoteStoreData) {
+class UserActions extends shim(UserStoreData) {
   // @ts-ignore
   private get env() {
     return getEnv(this) as Environment
   }
 
-  public async fetchNoteList() {
-    try {
-      await this.env.fcm.requestPermission()
-      const token = await this.env.fcm.getToken()
-      console.warn(JSON.stringify(token))
-      await promiseTimer(2000)
-      this.setNoteList([DemoNote])
-    } catch (error) {
-      console.tron.log(`NoteList error: ${JSON.stringify(error)}`)
-      throw formError(error, T.string.get_note_list_error)
-    }
+  @action
+  public login(email, password): Promise<void> {
+    this.isLogging = true
+    return promiseTimer(2000)
+      .then(data => {
+        this.setIsLogging(false)
+        this.setUser(DemoUser)
+        return Promise.resolve()
+      })
+      .catch(error => {
+        this.setIsLogging(false)
+        console.tron.log(`User error: ${JSON.stringify(error)}`)
+        return Promise.reject(formError(error, T.string.get_note_list_error))
+      })
   }
 
   @action
-  public setNoteList(noteList: Note[]) {
-    this.noteList.clear()
-    noteList.forEach(item => {
-      this.noteList.unshift({ ...item })
-    })
+  public setIsLogging(isLogging: boolean) {
+    this.isLogging = isLogging
+  }
+
+  @action
+  public setUser(user: User) {
+    this.user = user
   }
 
   // @action
@@ -68,6 +75,6 @@ class NoteActions extends shim(NoteStoreData) {
 }
 
 // tslint:disable-next-line:variable-name
-export const NoteStoreModel = mst(NoteActions, NoteStoreData, 'NoteStore')
+export const UserStoreModel = mst(UserActions, UserStoreData, 'UserStore')
 
-export type NoteStore = Instance<typeof NoteStoreModel>
+export type UserStore = Instance<typeof UserStoreModel>

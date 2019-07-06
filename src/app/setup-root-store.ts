@@ -3,6 +3,7 @@ import * as storage from '../../components/storage'
 import { Reactotron } from '../services/reactotron'
 import { Environment } from './environment'
 import { RootStore, RootStoreModel } from './root-store'
+// import firebase from 'react-native-firebase'
 
 /**
  * The key we'll be saving our state as within async storage.
@@ -60,6 +61,8 @@ export async function createEnvironment() {
 
   // create each service
   env.reactotron = new Reactotron()
+
+  // env.fcm = firebase.messaging()
 
   // allow each service to setup
   await env.reactotron.setup()
