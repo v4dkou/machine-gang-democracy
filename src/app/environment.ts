@@ -9,9 +9,4 @@ export class Environment {
    * Reactotron is only available in dev.
    */
   public reactotron: Reactotron
-
-  /**
-   * Database
-   */
-  public realm: Realm
 }

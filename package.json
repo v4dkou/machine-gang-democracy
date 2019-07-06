@@ -1,5 +1,5 @@
 {
-  "name": "IgniteBowserExt",
+  "name": "MachineGangDemocracy",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -14,13 +14,13 @@
     "ramda": "0.26.1",
     "react": "16.6.3",
     "react-native": "0.58.3",
+    "react-native-gifted-chat": "^0.9.11",
     "react-native-paper": "2.10.1",
     "react-native-root-toast": "3.0.2",
     "react-native-vector-icons": "6.1.0",
     "react-navigation": "2.16.0",
     "reactotron-mst": "2.1.4",
-    "reactotron-react-native": "2.1.5",
-    "realm": "2.23.0"
+    "reactotron-react-native": "2.1.5"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "7.2.3",

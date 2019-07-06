@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "440405307494",
+    "firebase_url": "https://machine-gang-democracy.firebaseio.com",
+    "project_id": "machine-gang-democracy",
+    "storage_bucket": "machine-gang-democracy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440405307494:android:088ff54fd29d1cca",
+        "android_client_info": {
+          "package_name": "com.machinegang.democracy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "440405307494-1pi60lcmpn6i420iah6jde5jtjrh3kra.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEuylvPlM8XLKtJspPH-hIjc8tyogcgAI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "440405307494-1pi60lcmpn6i420iah6jde5jtjrh3kra.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

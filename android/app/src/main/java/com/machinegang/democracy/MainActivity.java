@@ -1,4 +1,4 @@
-package com.ignite.bowser.ext;
+package com.machinegang.democracy;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "IgniteBowserExt";
+        return "MachineGangDemocracy";
     }
 }

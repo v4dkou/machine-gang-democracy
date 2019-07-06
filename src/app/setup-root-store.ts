@@ -1,7 +1,5 @@
 import { onSnapshot } from 'mobx-state-tree'
-import Realm from 'realm'
 import * as storage from '../../components/storage'
-import { Note } from '../services/database/schemas/note'
 import { Reactotron } from '../services/reactotron'
 import { Environment } from './environment'
 import { RootStore, RootStoreModel } from './root-store'
@@ -65,12 +63,6 @@ export async function createEnvironment() {
 
   // allow each service to setup
   await env.reactotron.setup()
-
-  env.realm = await Realm.open({
-    schema: [Note.schema],
-    schemaVersion: 1,
-    deleteRealmIfMigrationNeeded: true,
-  })
 
   return env
 }
