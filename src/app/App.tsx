@@ -2,6 +2,7 @@ import { autorun, IReactionDisposer } from 'mobx'
 import { disposeOnUnmount, Provider } from 'mobx-react'
 import { contains } from 'ramda'
 import React, { Component } from 'react'
+import GlobalFont from 'react-native-global-font'
 import { StatefulNavigator } from '../../components/navigation'
 import { BackButtonHandler } from '../../components/navigation/back-button-handler'
 import { ConnectionError } from '../../components/utils/error-utils'
@@ -23,6 +24,7 @@ export default class App extends Component<Props, RootComponentState> {
   @disposeOnUnmount
   private unauthorizedDisposer: IReactionDisposer
   public async componentDidMount() {
+    GlobalFont.applyGlobal('IBMPlexSans-Light')
     this.setState(
       {
         rootStore: await setupRootStore(),
