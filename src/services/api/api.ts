@@ -406,6 +406,33 @@ export interface InlineResponse2001 {
      */
     results: Array<DiscussionTopic>;
 }
+
+
+/**
+ *
+ * @export
+ * @interface InlineResponse2002
+ */
+export interface InlineResponse2002 {
+    /**
+     *
+     * @type {string}
+     * @memberof InlineResponse2002
+     */
+    next?: string | null;
+    /**
+     *
+     * @type {string}
+     * @memberof InlineResponse2002
+     */
+    previous?: string | null;
+    /**
+     *
+     * @type {Array<Message>}
+     * @memberof InlineResponse2002
+     */
+    results: Array<Message>;
+}
 /**
  *
  * @export
@@ -476,6 +503,13 @@ export interface Message {
      * @memberof Message
      */
     text: string;
+
+    /**
+     *
+     * @type {string}
+     * @memberof Message
+     */
+    dateCreated: string;
 }
 /**
  *
@@ -1294,7 +1328,7 @@ export const ChatsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatsMessages(id: string, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Message> {
+        chatsMessages(id: string, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002> {
             const localVarAxiosArgs = ChatsApiAxiosParamCreator(configuration).chatsMessages(id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};

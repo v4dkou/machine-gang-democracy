@@ -35,7 +35,7 @@ interface MessageProps<TMessage extends IMessage> {
 }
 
 export default class DiscussionMessage extends React.Component<MessageProps> {
-  defaultProps = {
+  public static defaultProps = {
     renderAvatar: undefined,
     renderBubble: null,
     renderDay: null,

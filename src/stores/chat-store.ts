@@ -3,13 +3,15 @@ import { getEnv, Instance, types } from 'mobx-state-tree'
 // import { loadString, saveString } from '../../components/storage'
 import { formError } from '../../components/utils/error-utils'
 import { Environment } from '../app/environment'
-import { Chat } from '../services/api'
+import { Chat, Message } from '../services/api'
 import { T } from '../style/values'
+import { IMessage } from 'react-native-gifted-chat'
 
 // tslint:disable-next-line:variable-name
 const ChatStoreData = types.model({
-  chatList: types.array(types.frozen<Chat>()),
+  messageList: types.array(types.frozen<Message>()),
   nextPageToken: types.optional(types.string, ''),
+  chatId: types.optional(types.number, 1),
 })
 
 class ChatActions extends shim(ChatStoreData) {
@@ -21,22 +23,14 @@ class ChatActions extends shim(ChatStoreData) {
   public async fetchChatList() {
     try {
       // const options = { query: { page_size: 7 } } as any
-      // const data = await this.env.api.messages.(options)
-      // if (data.data.next) {
-      //   this.setNextPageToken(data.data.next)
-      // }
-      // this.setChatList(data.data.results)
-      return [
-        {
-          _id: 1,
-          createdAt: 1,
-          text: 'Согласна! Пора бы уже!',
-          user: {
-            _id: 1,
-            avatar: 'https://avatars1.githubusercontent.com/u/29154528?s=460&v=4'
-          },
-        },
-      ]
+      const data = await this.env.api.chats.chatsMessages(
+        this.chatId.toString(),
+      )
+      if (data.data.next) {
+        this.setNextPageToken(data.data.next)
+      }
+      this.setMessageList(data.data.results)
+      return data.data.results
     } catch (error) {
       console.tron.log(`ChatList error: ${JSON.stringify(error)}`)
       throw formError(error, T.string.get_note_list_error)
@@ -57,12 +51,12 @@ class ChatActions extends shim(ChatStoreData) {
 
     this.setNextPageToken('')
 
-    console.tron.log(JSON.stringify(options))
+    const data = await this.env.api.chats.chatsMessages(options)
 
-    // const data = await this.env.api.messages.discussionTopicsList(options)
+    this.setNextPageToken(data.data.next || '')
+    this.updateChatList(data.data.results)
 
-    // this.setNextPageToken(data.data.next || '')
-    // this.updateChatList(data.data.results)
+    return data.data.results
   }
 
   @action
@@ -71,40 +65,44 @@ class ChatActions extends shim(ChatStoreData) {
   }
 
   @action
-  public setChatList(chatList: Chat[]) {
-    this.chatList.clear()
+  public setCurrentChat(chatId: number) {
+    this.chatId = chatId
+    this.nextPageToken = ''
+    this.messageList.clear()
+  }
 
-    chatList.forEach(item => {
-      this.chatList.push({ ...item })
+  @action
+  public setMessageList(messageList: Message[]) {
+    this.messageList.clear()
+
+    messageList.forEach(item => {
+      this.messageList.push({ ...item })
     })
   }
 
   @action
-  public updateChatList(chatList: Chat[]) {
-    chatList.forEach(item => {
-      this.chatList.push({ ...item })
+  public updateChatList(messageList: Message[]) {
+    messageList.forEach(item => {
+      this.messageList.push({ ...item })
     })
   }
 
-  // @action
-  // private setNewChat(note: Chat) {
-  //   this.noteList.unshift({ ...note })
-  // }
-  //
-  // @action
-  // private setUpdatingChat(note: Chat) {
-  //   const updatedChatPosition = this.noteList.findIndex(
-  //     item => item.id === note.id,
-  //   )
-  //   if (updatedChatPosition >= 0) {
-  //     this.noteList[updatedChatPosition] = { ...note }
-  //   }
-  // }
-  //
-  // @action
-  // private deleteChatFromList(note: Chat) {
-  //   this.noteList.remove(note)
-  // }
+  // TODO: Cover the "Message not sent" case
+  // TODO: Get rid of the chat-store in favour of content-store
+  public async sendMessages(messages: IMessage[]) {
+    const newMessages = [] as Message[]
+    // tslint:disable-next-line:prefer-for-of no-increment-decrement
+    for (let i = 0; i < messages.length; i++) {
+      const newMessage = await this.env.api.messages.messagesCreate({
+        chat: this.chatId,
+        text: messages[i].text,
+        dateCreated: new Date().toISOString(),
+      })
+      newMessages.push(newMessage.data)
+    }
+    this.updateChatList(newMessages)
+    return newMessages
+  }
 }
 
 // tslint:disable-next-line:variable-name

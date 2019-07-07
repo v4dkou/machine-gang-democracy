@@ -13,7 +13,7 @@ import {
   UserDevicesApi,
   UsersApi,
   AdvertisementsApi,
-  AdvertisementCategoriesApi
+  AdvertisementCategoriesApi, ChatsApi,
 } from '../services/api'
 import { BASE_PATH, DEFAULT_HEADERS } from '../services/api/base'
 import { loadString } from '../../components/storage'
@@ -104,6 +104,7 @@ export async function createEnvironment(getToken: () => string) {
     users: new UsersApi(apiConfig),
     discussions: new DiscussionTopicsApi(apiConfig),
     messages: new MessagesApi(apiConfig),
+    chats: new ChatsApi(apiConfig),
     announcements: new AnnouncementsApi(apiConfig),
     initiatives: new InitiativesApi(apiConfig),
     devices: new UserDevicesApi(apiConfig),

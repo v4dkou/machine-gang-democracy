@@ -7,16 +7,12 @@ import { ChatStore } from '../stores/chat-store'
 import { emptyNavigationOptions, ScreenContainer } from '../style/navigation'
 import { T } from '../style/values'
 import {
-  Bubble,
   GiftedChat,
-  Message,
-  MessageText,
   Send,
 } from 'react-native-gifted-chat'
 import { Chat } from '../services/api'
 import { ChatViewModel } from '../view-models/chat'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import DiscussionBubble from '../views/chat/bubble'
 import DiscussionMessage from '../views/chat/message'
 
 const styles = StyleSheet.create({
@@ -42,11 +38,7 @@ interface DiscussionListProps {
 export class ChatScreen extends Component<DiscussionListProps> {
   public static navigationOptions = emptyNavigationOptions
 
-  public static keyExtractor(item: Chat) {
-    return item.id.toString()
-  }
-
-  public readonly viewModel = new ChatViewModel(this.props.chatStore)
+  public readonly viewModel = new ChatViewModel(this.props.chatStore, 1)
 
   private renderSend(props) {
     return (
@@ -82,6 +74,7 @@ export class ChatScreen extends Component<DiscussionListProps> {
           alignTop={true}
           listViewProps={{ style: styles.listView }}
           renderDay={this.renderDay}
+          onLoadEarlier={this.viewModel.loadNextPage}
         />
       </ScreenContainer>
     )

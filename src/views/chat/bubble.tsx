@@ -58,7 +58,7 @@ interface BubbleProps<TMessage extends IMessage> {
 export default class DiscussionBubble<
   TMessage extends IMessage
 > extends React.Component<BubbleProps<TMessage>> {
-  static defaultProps = {
+  public static defaultProps = {
     touchableProps: {},
     onLongPress: null,
     renderMessageImage: null,

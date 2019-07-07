@@ -21,7 +21,7 @@ import {
     JwtLoginApi,
     MessagesApi,
     UserDevicesApi,
-    UsersApi,
+    UsersApi, ChatsApi,
 } from './api';
 
 export * from "./api";
@@ -32,6 +32,7 @@ export interface Api {
     users: UsersApi
     discussions: DiscussionTopicsApi
     messages: MessagesApi
+    chats: ChatsApi
     announcements: AnnouncementsApi
     initiatives: InitiativesApi
     devices: UserDevicesApi
