@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   itemAlert: {
-    backgroundColor: '#F27B3B'
+    backgroundColor: T.color.accent
   },
   itemContent: {
     paddingVertical: T.spacing.default,

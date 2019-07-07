@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'stretch',
-    backgroundColor: T.color.background,
+    backgroundColor: T.color.yellowBackground,
   },
 })
 

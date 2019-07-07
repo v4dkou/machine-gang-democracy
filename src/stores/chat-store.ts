@@ -26,7 +26,17 @@ class ChatActions extends shim(ChatStoreData) {
       //   this.setNextPageToken(data.data.next)
       // }
       // this.setChatList(data.data.results)
-      return [{_id:1, createdAt: 1, text: 'kek'}]
+      return [
+        {
+          _id: 1,
+          createdAt: 1,
+          text: 'Согласна! Пора бы уже!',
+          user: {
+            _id: 1,
+            avatar: 'https://avatars1.githubusercontent.com/u/29154528?s=460&v=4'
+          },
+        },
+      ]
     } catch (error) {
       console.tron.log(`ChatList error: ${JSON.stringify(error)}`)
       throw formError(error, T.string.get_note_list_error)
@@ -42,7 +52,7 @@ class ChatActions extends shim(ChatStoreData) {
       query: {
         page_size: 7,
         maxid: this.nextPageToken,
-      }
+      },
     } as any
 
     this.setNextPageToken('')

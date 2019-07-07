@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#BDBDBD'
   },
   itemAlert: {
-    backgroundColor: '#F27B3B',
+    backgroundColor: T.color.accent,
     borderTopWidth: 0,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10

@@ -11,9 +11,19 @@ import { DEFAULT_NAVIGATION_CONFIG } from '../navigation/navigation-config'
 import { T } from '../style/values'
 import { RootStore } from './root-store'
 import { setupRootStore } from './setup-root-store'
+import {DefaultTheme, ThemeProvider} from 'react-native-paper'
 
 interface RootComponentState {
   rootStore?: RootStore
+}
+const theme = {
+  ...DefaultTheme,
+  fonts: {
+    regular: 'IBMPlexSans-Regular',
+    medium: 'IBMPlexSans-Medium',
+    light: 'IBMPlexSans-Light',
+    thin: 'IBMPlexSans-Thin',
+  },
 }
 
 interface Props {}
@@ -81,9 +91,11 @@ export default class App extends Component<Props, RootComponentState> {
 
     return (
       <Provider rootStore={rootStore} {...rootStore}>
-        <BackButtonHandler canExit={App.canExit}>
-          <StatefulNavigator />
-        </BackButtonHandler>
+        <ThemeProvider theme={theme}>
+          <BackButtonHandler canExit={App.canExit}>
+            <StatefulNavigator />
+          </BackButtonHandler>
+        </ThemeProvider>
       </Provider>
     )
   }

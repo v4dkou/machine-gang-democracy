@@ -54,9 +54,18 @@ export const MainNavigator = observer(
       DiscussionDetails: {
         screen: createMaterialTopTabNavigator(
           {
-            Chat: ChatScreen,
-            Vote: AdListScreen,
-            Process: AdListScreen,
+            Chat: {
+                screen: ChatScreen,
+                navigationOptions: { title: 'Обсуждение' },
+            },
+            Vote: {
+                screen: AdListScreen,
+                navigationOptions: { title: 'Инициатива' },
+            },
+            Process: {
+                screen: AdListScreen,
+                navigationOptions: { title: 'Процесс' },
+            },
           },
           tabOptions,
         ),

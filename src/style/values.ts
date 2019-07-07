@@ -6,7 +6,7 @@ export const T = {
   color: {
     primary: '#333',
     primaryDark: '#000',
-    accent: '#CC8800',
+    accent: '#F27B3B',
     background: '#F0F0F0',
     yellowBackground: '#F8EEE4',
     white: '#FFF',
