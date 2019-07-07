@@ -12,6 +12,7 @@ import { NavigationStore } from '../../components/navigation/navigation-store'
 import { Advertisement, AdvertisementSubcategory } from '../services/api/api'
 import { AdStore } from '../stores/ad-store'
 import {
+  createFlatNavigationOptions,
   emptyNavigationOptions,
   ScreenContainer,
 } from '../style/navigation'
@@ -31,23 +32,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 5,
     paddingBottom: 20,
-    backgroundColor: '#F8EEE4'
+    backgroundColor: '#F8EEE4',
   },
   item: {
     marginTop: 15,
     paddingVertical: 0,
     paddingHorizontal: 0,
     elevation: 7,
-    borderRadius: 10
+    borderRadius: 10,
   },
   itemTitle: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   itemContent: {
     paddingVertical: T.spacing.default,
-    paddingHorizontal: T.spacing.default
+    paddingHorizontal: T.spacing.default,
   },
 })
 
@@ -60,13 +61,17 @@ interface AdListProps {
 @inject('navigationStore')
 @observer
 export class AdListScreen extends Component<AdListProps> {
-  public static navigationOptions = emptyNavigationOptions
+  public static navigationOptions = ({ navigation }) =>
+    createFlatNavigationOptions(navigation.getParam('name'))
 
   public static keyExtractor(item: Advertisement) {
     return item.id.toString()
   }
 
-  public readonly viewModel = new AdListViewModel(this.props.adStore, this.props.navigation.getParam('subcategoryId'))
+  public readonly viewModel = new AdListViewModel(
+    this.props.adStore,
+    this.props.navigation.getParam('subcategoryId'),
+  )
 
   public renderAdList = (adList: Advertisement[]) => (
     <SectionList
@@ -85,9 +90,7 @@ export class AdListScreen extends Component<AdListProps> {
       <Card.Content style={styles.itemContent}>
         <View style={styles.itemTitle}>
           <Title>{item.title}</Title>
-          {(!!item.price) &&
-            <Title>{item.price}</Title>
-          }
+          {!!item.price && <Title>{item.price}</Title>}
         </View>
       </Card.Content>
 
@@ -104,9 +107,7 @@ export class AdListScreen extends Component<AdListProps> {
           isFetching={this.viewModel.adListRequest.isFetching}
           error={this.viewModel.adListRequest.error}
           dataSource={
-            this.props.adStore.adList
-              ? this.props.adStore.adList.slice()
-              : null
+            this.props.adStore.adList ? this.props.adStore.adList.slice() : null
           }
           renderData={this.renderAdList}
           renderEmpty={renderEmptyView(
@@ -123,16 +124,20 @@ export class AdListScreen extends Component<AdListProps> {
             buttonProps,
           )}
         />
-        <FAB
-          style={styles.fab}
-          icon="add"
-          color={'white'}
-        />
+        <FAB style={styles.fab} icon="add" color={'white'} />
       </ScreenContainer>
     )
   }
 }
 
-export function routeToAdList(navStore: NavigationStore, subcategory?: AdvertisementSubcategory) {
-  navStore.navigateTo('AdList', subcategory ? { subcategoryId: subcategory.id } : null)
+export function routeToAdList(
+  navStore: NavigationStore,
+  subcategory?: AdvertisementSubcategory,
+) {
+  navStore.navigateTo(
+    'AdList',
+    subcategory
+      ? { subcategoryId: subcategory.id, name: subcategory.name }
+      : null,
+  )
 }

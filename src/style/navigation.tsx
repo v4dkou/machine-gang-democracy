@@ -29,6 +29,26 @@ export function createBasicNavigationOptions(
   }
 }
 
+
+/**
+ * Создаёт стиль для navbar'а, единый для приложения
+ * @param {string} title Заголовок сцены
+ * @param {string} icons Иконки в ActionBar'е
+ * @return {{title: *, headerStyle: {backgroundColor: string}, headerTitleStyle: {color: string}, headerTintColor: string}}
+ */
+export function createFlatNavigationOptions(
+    title: string,
+    icons?: ReactElement<any>,
+): NavigationScreenOptions {
+  return {
+    title,
+    headerStyle: { backgroundColor: T.color.transparent },
+    headerTitleStyle: { color: 'black' },
+    headerTintColor: 'black',
+    headerRight: icons,
+  }
+}
+
 /**
  * Пустой navbar для экрана
  * @param {string} title Заголовок сцены

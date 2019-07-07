@@ -101,7 +101,7 @@ export default class Login extends Component<LoginProps, LoginState> {
       user => {
         console.tron.warn(JSON.stringify(user))
         if (user) {
-          this.props.navigationStore.navigateTo('Discussion')
+          this.props.navigationStore.navigateTo('Main')
         }
       },
     )

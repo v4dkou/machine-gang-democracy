@@ -4,7 +4,8 @@ import { DEFAULT_STATE, RootNavigator } from '../navigation/root-navigator'
 import { AdStoreModel } from '../stores/ad-store'
 import { AdCategoryStoreModel } from '../stores/ad-categories-store'
 import { DiscussionStoreModel } from '../stores/discussion-store'
-import {UserStoreModel} from '../stores/user-store';
+import { UserStoreModel } from '../stores/user-store'
+import { ChatStoreModel } from '../stores/chat-store'
 
 /**
  * An RootStore model.
@@ -16,6 +17,7 @@ export const RootStoreModel = types.model('RootStore').props({
   adCategoryStore: AdCategoryStoreModel,
   discussionStore: DiscussionStoreModel,
   userStore: UserStoreModel,
+  chatStore: ChatStoreModel,
 })
 
 /**

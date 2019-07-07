@@ -18,7 +18,7 @@ import {
 import { T } from '../style/values'
 import { DiscussionListViewModel } from '../view-models/discussion-list'
 import { buttonProps } from '../views/button'
-import { routeToDiscussion } from './note'
+import { routeToDiscussion } from './discussion'
 
 const styles = StyleSheet.create({
   fab: {

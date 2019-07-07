@@ -7,15 +7,14 @@ import { NavigationScreenProps } from 'react-navigation'
 import { NavigationStore } from '../../components/navigation/navigation-store'
 import { showLongToastOnError } from '../../components/utils/error-utils'
 import { showLongToast } from '../../components/utils/toast-utils'
-import { Note } from '../services/database/schemas/note'
-import { DiscussionTopic } from '../services/api/api'
+import { DiscussionTopic } from '../services/api'
 import { DiscussionStore } from '../stores/discussion-store'
 import {
   createBasicNavigationOptions,
   ScreenContainer,
 } from '../style/navigation'
 import { T } from '../style/values'
-import { NoteViewModel } from '../view-models/note'
+import { DiscussionViewModel } from '../view-models/discussion'
 import CommonButton from '../views/button'
 
 const IS_SHOW_ICON_KEY = 'isShowIcon'
@@ -41,7 +40,7 @@ interface NoteScreenProps extends NavigationScreenProps {
 @inject('discussionStore')
 @inject('navigationStore')
 @observer
-export class NoteScreen extends Component<NoteScreenProps> {
+export class DiscussionScreen extends Component<NoteScreenProps> {
   public static navigationOptions = ({ navigation }) =>
     createBasicNavigationOptions(
       navigation.getParam(TITLE_KEY) || 'Создание заказа',
@@ -54,7 +53,7 @@ export class NoteScreen extends Component<NoteScreenProps> {
       ) : null,
     )
 
-  public readonly viewModel = new NoteViewModel(
+  public readonly viewModel = new DiscussionViewModel(
     this.props.noteStore,
     this.props.navigation.getParam('noteId'),
   )
@@ -219,6 +218,6 @@ export class NoteScreen extends Component<NoteScreenProps> {
   }
 }
 
-export function routeToNote(navStore: NavigationStore, note?: Note) {
-  navStore.navigateTo('Note', note ? { noteId: note.id } : null)
+export function routeToDiscussion(navStore: NavigationStore, discussion?: DiscussionTopic) {
+  navStore.navigateTo('DiscussionDetails', discussion ? { discussionId: discussion.id } : null)
 }

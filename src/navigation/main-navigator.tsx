@@ -6,54 +6,71 @@ import {
 
 import { AdCategoryListScreen } from '../screens/ad-category-list'
 import { AdListScreen } from '../screens/ad-list'
+import { ChatScreen } from '../screens/chat'
 import { DiscussionListScreen } from '../screens/discussion-list'
-import { NoteScreen } from '../screens/note'
+import { T } from '../style/values'
+
+const tabOptions = {
+  tabBarOptions: {
+    labelStyle: {
+      fontSize: 20,
+      fontFamily: 'IBMPlexSans-Bold',
+      color: '#000',
+    },
+    style: {
+      backgroundColor: '#FFF',
+    },
+    activeTintColor: '#828282',
+    inactiveTintColor: '#333',
+    indicatorStyle: {
+      width: 0,
+    },
+    scrollEnabled: true,
+    cardStyle: {
+      backgroundColor: T.color.yellowBackground,
+    },
+  },
+}
 
 export const MainNavigator = observer(
-  createMaterialTopTabNavigator(
+  createStackNavigator(
     {
-      Discussion: {
-        screen: createStackNavigator({
-          DiscussionList: {
-            screen: DiscussionListScreen,
+      Main: {
+        screen: createMaterialTopTabNavigator(
+          {
+            DiscussionList: {
+              screen: DiscussionListScreen,
+              navigationOptions: { title: 'Актуальное' },
+            },
+            AdCategoryList: {
+              screen: AdCategoryListScreen,
+              navigationOptions: { title: 'Объявления рядом' },
+            },
           },
-          Note: {
-            screen: NoteScreen,
-          },
-        }),
-        navigationOptions: { title: 'Актуальное' },
+          tabOptions,
+        ),
+        navigationOptions: { header: null },
       },
-      AdCategoryList: {
-        screen: createStackNavigator({
-          AdCategoryList: {
-            screen: AdCategoryListScreen
+      DiscussionDetails: {
+        screen: createMaterialTopTabNavigator(
+          {
+            Chat: ChatScreen,
+            Vote: AdListScreen,
+            Process: AdListScreen,
           },
-          AdList: {
-            screen: AdListScreen
-          }
-          // Note: {
-          //   screen: NoteScreen,
-          // },
-        }),
-        navigationOptions: { title: 'Объявления рядом' },
+          tabOptions,
+        ),
+      },
+      AdList: {
+        screen: AdListScreen,
       },
     },
     {
-      tabBarOptions: {
-        labelStyle: {
-          fontSize: 16,
-          fontFamily: 'IBMPlexSans-Bold',
-          color: '#000'
-        },
-        style: {
-          backgroundColor: '#FFF',
-        },
-        activeTintColor: '#828282',
-        inactiveTintColor: '#333',
-        indicatorStyle: {
-          width: 0,
-        },
-        scrollEnabled: true,
+      cardStyle: {
+        backgroundColor: T.color.yellowBackground,
+      },
+      containerOptions: {
+        backgroundColor: T.color.yellowBackground,
       },
     },
   ),
