@@ -274,13 +274,13 @@ export default class Login extends Component<LoginProps, LoginState> {
                 style={styles.loginButton}
                 onPress={this.handleLogin}
               >
-                <Text style={styles.loginText}>Login</Text>
+                <Text style={styles.loginText}>Войти</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.registerButton}
                 onPress={this.handleRegister}
               >
-                <Text style={styles.registerText}>Register</Text>
+                <Text style={styles.registerText}>Регистрация</Text>
               </TouchableOpacity>
             </View>
           </SafeAreaView>
@@ -327,8 +327,7 @@ export default class Login extends Component<LoginProps, LoginState> {
                 <View>
                   <TouchableOpacity style={styles.itemContent_login}>
                     <TextInput
-                      label="Email Address"
-                      keyboardType="email-address"
+                      label="Логин"
                       value={email}
                       onChangeText={this.onEmailInput}
                       onBlur={this.onEmailBlur}
@@ -342,7 +341,7 @@ export default class Login extends Component<LoginProps, LoginState> {
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.itemContent_login}>
                     <TextInput
-                      label="Password"
+                      label="Пароль"
                       value={password}
                       secureTextEntry={secureTextEntry}
                       onChangeText={this.onPasswordInput}
@@ -362,7 +361,7 @@ export default class Login extends Component<LoginProps, LoginState> {
                     style={styles.loginButton_login}
                     onPress={this.login}
                   >
-                    <Text style={styles.loginText_login}>Login</Text>
+                    <Text style={styles.loginText_login}>Войти</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.forgotButton_login}>
                     <Text style={styles.forgotText_login}>
@@ -414,13 +413,11 @@ export default class Login extends Component<LoginProps, LoginState> {
                 delay={ANIM_TIMINGS.delay_login_2}
                 duration={1000}
               >
-                <Text style={styles.subTitle_login}>Welcome back!</Text>
 
                 <View>
                   <TouchableOpacity style={styles.itemContent_login}>
                     <TextInput
-                      label="Email Address"
-                      keyboardType="email-address"
+                      label="Логин"
                       value={email}
                       onChangeText={this.onEmailInput}
                       onBlur={this.onEmailBlur}
@@ -434,7 +431,7 @@ export default class Login extends Component<LoginProps, LoginState> {
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.itemContent_login}>
                     <TextInput
-                      label="Password"
+                      label="Пароль"
                       value={password}
                       secureTextEntry={secureTextEntry}
                       onChangeText={this.onPasswordInput}
@@ -447,7 +444,7 @@ export default class Login extends Component<LoginProps, LoginState> {
                       {this.state.errorPassword}
                     </HelperText>
                     <TextInput
-                      label="Confirm"
+                      label="Повторите пароль"
                       value={confirm}
                       secureTextEntry={secureTextEntry}
                       onChangeText={this.onConfirmInput}
@@ -467,7 +464,7 @@ export default class Login extends Component<LoginProps, LoginState> {
                     style={styles.loginButton_login}
                     onPress={this.register}
                   >
-                    <Text style={styles.loginText_login}>Register</Text>
+                    <Text style={styles.loginText_login}>Зарегистрироваться</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -511,13 +508,13 @@ const styles = StyleSheet.create({
   },
   logoContent: {
     backgroundColor: '#fff',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    width: 300,
+    height: 205,
   },
   logoImage: {
-    width: 200,
-    height: 200,
+    alignContent: 'space-around',
+    width: 301,
+    height: 205,
   },
   titleContainer: {
     alignItems: 'center',
@@ -534,6 +531,7 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center',
     marginBottom: 50,
+    minWidth: 320,
     justifyContent: 'center',
   },
   textContent: {
@@ -544,6 +542,7 @@ const styles = StyleSheet.create({
   },
   loginContainer: {
     height: 150,
+    minWidth: 320,
     alignItems: 'stretch',
     marginBottom: 50,
   },
@@ -577,7 +576,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   backContainer_login: {
-    marginTop: 8,
+    marginTop: 24,
     paddingHorizontal: 20,
   },
   titleContainer_login: {
@@ -594,16 +593,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   logoContainer_login: {
-    width: 140,
+    width: 205,
     height: 140,
-    marginTop: 10,
-    borderRadius: 70,
     backgroundColor: '#fff',
   },
   logoImage_login: {
-    width: 140,
+    width: 205,
     height: 140,
-    borderRadius: 70,
   },
   loginForm_scrollContainer: {
     flex: 1,
@@ -616,6 +612,7 @@ const styles = StyleSheet.create({
     alignContent: 'space-around',
     borderRadius: 5,
     marginTop: 10,
+    minWidth: 320,
     paddingVertical: 10,
     backgroundColor: '#fff',
   },
