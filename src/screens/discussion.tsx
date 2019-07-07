@@ -55,7 +55,7 @@ export class DiscussionScreen extends Component<NoteScreenProps> {
 
   public readonly viewModel = new DiscussionViewModel(
     this.props.noteStore,
-    this.props.navigation.getParam('noteId'),
+    this.props.navigation.getParam('discussionId'),
   )
 
   @disposeOnUnmount

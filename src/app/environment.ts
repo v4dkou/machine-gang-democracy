@@ -1,4 +1,3 @@
-import { RNFirebase } from 'react-native-firebase'
 import { Reactotron } from '../services/reactotron'
 
 import { Api } from '../services/api'
@@ -12,8 +11,6 @@ export class Environment {
    * Reactotron is only available in dev.
    */
   public reactotron: Reactotron
-
-  public fcm: RNFirebase.messaging.Messaging
 
   public api: Api
 }

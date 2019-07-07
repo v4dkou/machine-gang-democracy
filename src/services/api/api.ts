@@ -542,6 +542,18 @@ export interface User {
      * @memberof User
      */
     username: string;
+    /**
+     *
+     * @type {avatar}
+     * @memberof User
+     */
+    avatar: string;
+    /**
+     *
+     * @type {fullname}
+     * @memberof User
+     */
+    fullname: string;
 }
 /**
  *

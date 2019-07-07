@@ -1,16 +1,24 @@
 import { IMessage } from 'react-native-gifted-chat'
 import { createContentStore } from '../../components/content-store'
 import { ConnectionError } from '../../components/utils/error-utils'
-import { Message } from '../services/api'
+import {DiscussionTopic, Message} from '../services/api'
 import { ChatStore } from '../stores/chat-store'
+import {DiscussionStore} from '../stores/discussion-store';
+import {computed} from 'mobx';
 
 export class ChatViewModel {
   public chatRequest = createContentStore<IMessage[], ConnectionError>()
+  private readonly chatId: number
 
   constructor(
-    private readonly chatStore: ChatStore,
-    private readonly chatId: number,
-  ) {
+        private readonly chatStore: ChatStore,
+        discussionStore: DiscussionStore,
+        discussionId: number,
+    ) {
+    if (discussionId === undefined || discussionId === null) return null
+
+    this.chatId = discussionStore.discussionList.find(item => item.id === discussionId).chat
+
     this.chatStore.setCurrentChat(this.chatId)
     this.loadDiscussionList()
   }
@@ -36,7 +44,8 @@ export class ChatViewModel {
       createdAt: Date.parse(item.dateCreated),
       user: {
         _id: item.user.id,
-        name: item.user.username,
+        name: item.user.fullname,
+        avatar: item.user.avatar,
       },
     }
   }

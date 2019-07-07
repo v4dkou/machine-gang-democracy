@@ -10,8 +10,12 @@ import { showLongToast } from '../../components/utils/toast-utils'
 import { DEFAULT_NAVIGATION_CONFIG } from '../navigation/navigation-config'
 import { T } from '../style/values'
 import { RootStore } from './root-store'
-import { setupRootStore } from './setup-root-store'
-import {DefaultTheme, ThemeProvider} from 'react-native-paper'
+import {registerFCM, setupRootStore} from './setup-root-store'
+import { DefaultTheme, ThemeProvider } from 'react-native-paper'
+import { Platform } from 'react-native'
+import FCM, { NotificationActionType } from 'react-native-fcm'
+import {registerAppListener} from './botch-listeners';
+import {NavigationStore} from '../../components/navigation/navigation-store';
 
 interface RootComponentState {
   rootStore?: RootStore
@@ -40,7 +44,7 @@ export default class App extends Component<Props, RootComponentState> {
         rootStore: await setupRootStore(),
       },
       () => {
-        const nextSetup = () => {
+        const nextSetup = async () => {
           const {
             userStore,
             // messagesStore,
@@ -62,6 +66,8 @@ export default class App extends Component<Props, RootComponentState> {
               navigationStore.navigateTo('Login') // TODO: Return user after authorization
             }
           })
+
+          await registerFCM(navigationStore, userStore)
         }
 
         this.state.rootStore.userStore

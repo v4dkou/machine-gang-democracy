@@ -1,23 +1,29 @@
 import { onSnapshot } from 'mobx-state-tree'
+import { Platform } from 'react-native'
+import FCM from 'react-native-fcm'
+import { NavigationStore } from '../../components/navigation/navigation-store'
 import * as storage from '../../components/storage'
-import { Reactotron } from '../services/reactotron'
-import { Environment } from './environment'
-import { RootStore, RootStoreModel } from './root-store'
+import { loadString } from '../../components/storage'
 import {
+  AdvertisementCategoriesApi,
+  AdvertisementsApi,
   AnnouncementsApi,
+  ChatsApi,
   Configuration,
   DiscussionTopicsApi,
   InitiativesApi,
   JwtLoginApi,
-  MessagesApi, TOKEN_KEY,
+  MessagesApi,
+  TOKEN_KEY,
   UserDevicesApi,
   UsersApi,
-  AdvertisementsApi,
-  AdvertisementCategoriesApi, ChatsApi,
 } from '../services/api'
 import { BASE_PATH, DEFAULT_HEADERS } from '../services/api/base'
-import { loadString } from '../../components/storage'
-import { ACCESS_TOKEN_PREF_KEY } from '../stores/user-store'
+import { Reactotron } from '../services/reactotron'
+import { ACCESS_TOKEN_PREF_KEY, UserStore } from '../stores/user-store'
+import { registerAppListener } from './botch-listeners'
+import { Environment } from './environment'
+import { RootStore, RootStoreModel } from './root-store'
 // import firebase from 'react-native-firebase'
 
 /**
@@ -109,7 +115,7 @@ export async function createEnvironment(getToken: () => string) {
     initiatives: new InitiativesApi(apiConfig),
     devices: new UserDevicesApi(apiConfig),
     advertisements: new AdvertisementsApi(apiConfig),
-    advertisementCategories: new AdvertisementCategoriesApi(apiConfig)
+    advertisementCategories: new AdvertisementCategoriesApi(apiConfig),
   }
 
   // env.fcm = firebase.messaging()
@@ -118,4 +124,44 @@ export async function createEnvironment(getToken: () => string) {
   await env.reactotron.setup()
 
   return env
+}
+
+export const registerFCM = async (
+  navigationStore: NavigationStore,
+  userStore: UserStore,
+) => {
+  // fixme: The integration is not complete, as the preferred method would be to use https://github.com/invertase/react-native-firebase
+  // Pushes were integrated in a haste for a proof of concept.
+  FCM.createNotificationChannel({
+    id: 'default',
+    name: 'Default',
+    description: 'used for example',
+    priority: 'high',
+  })
+
+  registerAppListener(navigationStore)
+
+  FCM.getInitialNotification().then(notif => {
+    if (notif && notif.targetScreen === 'chat') {
+      setTimeout(() => {
+        navigationStore.navigateTo('Chat')
+      },         500)
+    }
+  })
+
+  try {
+    const result = await FCM.requestPermissions()
+  } catch (e) {
+    console.error(e)
+  }
+
+  FCM.getFCMToken().then(token => {
+    userStore.setPushToken(token)
+  })
+
+  if (Platform.OS === 'ios') {
+    FCM.getAPNSToken().then(token => {
+      console.log('APNS TOKEN (getFCMToken)', token)
+    })
+  }
 }

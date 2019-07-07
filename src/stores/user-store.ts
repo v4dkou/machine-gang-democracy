@@ -1,17 +1,12 @@
-import { action, mst, shim } from 'classy-mst'
-import { getEnv, Instance, types } from 'mobx-state-tree'
+import {action, mst, shim} from 'classy-mst'
+import {getEnv, Instance, types} from 'mobx-state-tree'
 // import { loadString, saveString } from '../../components/storage'
-import { formError } from '../../components/utils/error-utils'
-import { Environment } from '../app/environment'
-import { User } from '../services/api'
-import { T } from '../style/values'
-import {
-  load,
-  loadString,
-  remove,
-  save,
-  saveString,
-} from '../../components/storage'
+import {formError} from '../../components/utils/error-utils'
+import {Environment} from '../app/environment'
+import {User, UserDeviceDeviceTypeEnum} from '../services/api'
+import {T} from '../style/values'
+import {load, loadString, remove, save, saveString} from '../../components/storage'
+import {Platform} from 'react-native';
 
 // tslint:disable-next-line:variable-name
 const UserStoreData = types.model({
@@ -117,6 +112,16 @@ class UserActions extends shim(UserStoreData) {
   @action
   public setAccessToken(accessToken: string) {
     this.accessToken = accessToken
+  }
+
+  public setPushToken(pushToken: string) {
+    this.env.api.devices.userDevicesCreate({
+      deviceType: Platform.select({
+        android: UserDeviceDeviceTypeEnum.Gcm,
+        ios: UserDeviceDeviceTypeEnum.Ios,
+      }),
+      deviceId: pushToken,
+    })
   }
 
   get isLogged(): boolean {
