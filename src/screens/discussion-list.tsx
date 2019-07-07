@@ -19,6 +19,7 @@ import { T } from '../style/values'
 import { DiscussionListViewModel } from '../view-models/discussion-list'
 import { buttonProps } from '../views/button'
 import { routeToDiscussion } from './discussion'
+import { routeToCreateDiscussion } from './discussion-create'
 
 const styles = StyleSheet.create({
   fab: {
@@ -115,7 +116,7 @@ export class DiscussionListScreen extends Component<DiscussionListProps> {
   }
 
   public routeToCreateDiscussion = () => {
-    routeToDiscussion(this.props.navigationStore)
+    routeToCreateDiscussion(this.props.navigationStore)
   }
 
   public render() {

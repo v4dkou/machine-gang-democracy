@@ -8,6 +8,7 @@ import { AdCategoryListScreen } from '../screens/ad-category-list'
 import { AdListScreen } from '../screens/ad-list'
 import { ChatScreen } from '../screens/chat'
 import { DiscussionListScreen } from '../screens/discussion-list'
+import { CreateDiscussionScreen } from '../screens/discussion-create'
 import { T } from '../style/values'
 
 const tabOptions = {
@@ -73,6 +74,9 @@ export const MainNavigator = observer(
       AdList: {
         screen: AdListScreen,
       },
+      CreateDiscussion: {
+        screen: CreateDiscussionScreen
+      }
     },
     {
       cardStyle: {
