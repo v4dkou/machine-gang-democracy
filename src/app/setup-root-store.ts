@@ -141,13 +141,13 @@ export const registerFCM = async (
 
   registerAppListener(navigationStore)
 
-  FCM.getInitialNotification().then(notif => {
-    if (notif && notif.targetScreen === 'chat') {
-      setTimeout(() => {
-        navigationStore.navigateTo('Chat')
-      },         500)
-    }
-  })
+  // FCM.getInitialNotification().then(notif => {
+  //   if (notif && notif.targetScreen === 'chat') {
+  //     setTimeout(() => {
+  //       navigationStore.navigateTo('Chat')
+  //     },         500)
+  //   }
+  // })
 
   try {
     const result = await FCM.requestPermissions()

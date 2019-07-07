@@ -15,7 +15,7 @@ import { T } from '../style/values'
 const tabOptions = {
   tabBarOptions: {
     labelStyle: {
-      fontSize: 20,
+      fontSize: 16,
       fontFamily: 'IBMPlexSans-Bold',
       color: '#000',
     },
