@@ -2,22 +2,16 @@ import { action, mst, shim } from 'classy-mst'
 import { getEnv, Instance, types } from 'mobx-state-tree'
 // import { loadString, saveString } from '../../components/storage'
 import { formError } from '../../components/utils/error-utils'
-import promiseTimer from '../../components/utils/promise-timer'
 import { Environment } from '../app/environment'
-import { Ad } from '../services/api/ad'
+import { Advertisement } from '../services/api/api'
 import { T } from '../style/values'
 
 // tslint:disable-next-line:variable-name
 const AdStoreData = types.model({
-  adList: types.array(types.frozen<Ad>()),
+  adList: types.array(types.frozen<Advertisement>()),
+  subcategory: types.optional(types.string, ''),
+  nextPageToken: types.optional(types.string, '')
 })
-
-// tslint:disable-next-line:variable-name
-const DemoAd = {
-  id: 11,
-  title: 'Title',
-  description: 'Description',
-} as Ad
 
 class AdActions extends shim(AdStoreData) {
   // @ts-ignore
@@ -25,13 +19,15 @@ class AdActions extends shim(AdStoreData) {
     return getEnv(this) as Environment
   }
 
-  public async fetchAdList() {
+  public async fetchAdList(subcategory?: string) {
     try {
-      // await this.env.fcm.requestPermission()
-      // const token = await this.env.fcm.getToken()
-      // console.warn(JSON.stringify(token))
-      await promiseTimer(2000)
-      this.setAdList([DemoAd])
+      const options = { query: { subcategory } } as any
+      const data = await this.env.api.advertisements.advertisementsList(null, null, options)
+
+      if (data.data.next) {
+        this.setNextPageToken(data.data.next)
+      }
+      this.setAdList(data.data.results)
     } catch (error) {
       console.tron.log(`AdList error: ${JSON.stringify(error)}`)
       throw formError(error, T.string.get_note_list_error)
@@ -39,10 +35,22 @@ class AdActions extends shim(AdStoreData) {
   }
 
   @action
-  public setAdList(noteList: Ad[]) {
+  public setAdList(adList: Advertisement[]) {
     this.adList.clear()
-    noteList.forEach(item => {
+    adList.forEach(item => {
       this.adList.unshift({ ...item })
+    })
+  }
+
+  @action
+  public setNextPageToken(nextPageToken?: string) {
+    this.nextPageToken = nextPageToken
+  }
+
+  @action
+  public updateAdvertisementList(adList: Advertisement[]) {
+    adList.forEach(item => {
+      this.adList.push({ ...item })
     })
   }
 

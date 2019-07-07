@@ -5,7 +5,7 @@ import { AdStore } from '../stores/ad-store'
 export class AdListViewModel {
   public adListRequest = createContentStore<void, ConnectionError>()
 
-  constructor(private readonly adStore: AdStore) {
+  constructor(private readonly adStore: AdStore, public readonly subcategoryId: string) {
     this.loadAdList()
   }
 
@@ -13,7 +13,7 @@ export class AdListViewModel {
     this.adListRequest.setLoading()
 
     this.adStore
-      .fetchAdList()
+      .fetchAdList(this.subcategoryId)
       .then(this.adListRequest.setData)
       .catch(this.adListRequest.setError)
   }

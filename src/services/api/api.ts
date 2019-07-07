@@ -16,7 +16,7 @@
 import * as globalImportUrl from 'url';
 import { Configuration } from './configuration';
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, RequestArgs, BaseAPI, RequiredError } from './base';
 
 export const TOKEN_KEY = "Authorization";
 
@@ -26,6 +26,12 @@ export const TOKEN_KEY = "Authorization";
  * @interface Advertisement
  */
 export interface Advertisement {
+    /**
+     *
+     * @type {number}
+     * @memberof Advertisement
+     */
+    id?: number;
     /**
      *
      * @type {AdvertisementSubcategory}
@@ -104,7 +110,7 @@ export interface AdvertisementCategory {
      * @type {string}
      * @memberof AdvertisementCategory
      */
-    promo?: string;
+    promo?: Advertisement;
 }
 /**
  *
@@ -2988,5 +2994,3 @@ export class UsersApi extends BaseAPI {
     }
 
 }
-
-

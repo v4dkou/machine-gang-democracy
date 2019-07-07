@@ -3,6 +3,8 @@ import {
   createMaterialTopTabNavigator,
   createStackNavigator,
 } from 'react-navigation'
+
+import { AdCategoryListScreen } from '../screens/ad-category-list'
 import { AdListScreen } from '../screens/ad-list'
 import { DiscussionListScreen } from '../screens/discussion-list'
 import { NoteScreen } from '../screens/note'
@@ -21,14 +23,17 @@ export const MainNavigator = observer(
         }),
         navigationOptions: { title: 'Актуальное' },
       },
-      Ads: {
+      AdCategoryList: {
         screen: createStackNavigator({
+          AdCategoryList: {
+            screen: AdCategoryListScreen
+          },
           AdList: {
-            screen: AdListScreen,
-          },
-          Note: {
-            screen: NoteScreen,
-          },
+            screen: AdListScreen
+          }
+          // Note: {
+          //   screen: NoteScreen,
+          // },
         }),
         navigationOptions: { title: 'Объявления рядом' },
       },
@@ -36,15 +41,15 @@ export const MainNavigator = observer(
     {
       tabBarOptions: {
         labelStyle: {
-          fontSize: 20,
+          fontSize: 16,
           fontFamily: 'IBMPlexSans-Bold',
-          color: '#000',
+          color: '#000'
         },
         style: {
           backgroundColor: '#FFF',
         },
-          activeTintColor: '#828282',
-          inactiveTintColor: '#333',
+        activeTintColor: '#828282',
+        inactiveTintColor: '#333',
         indicatorStyle: {
           width: 0,
         },

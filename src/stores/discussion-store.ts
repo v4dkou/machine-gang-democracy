@@ -20,9 +20,7 @@ class DiscussionActions extends shim(DiscussionStoreData) {
 
   public async fetchDiscussionList() {
     try {
-      const options = { query: { page_size: 7 } } as any
-
-      const data = await this.env.api.discussions.discussionTopicsList(options)
+      const data = await this.env.api.discussions.discussionTopicsList(null, 7)
 
       if (data.data.next) {
         this.setNextPageToken(data.data.next)
@@ -39,18 +37,11 @@ class DiscussionActions extends shim(DiscussionStoreData) {
       return
     }
 
-    const options = {
-      query: {
-        page_size: 7,
-        maxid: this.nextPageToken
-      }
-    } as any
+    const token = this.nextPageToken
 
     this.setNextPageToken('')
 
-    console.tron.log(JSON.stringify(options))
-
-    const data = await this.env.api.discussions.discussionTopicsList(options)
+    const data = await this.env.api.discussions.discussionTopicsList(token, 7)
 
     this.setNextPageToken(data.data.next || '')
     this.updateDiscussionList(data.data.results)

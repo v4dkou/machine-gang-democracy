@@ -13,6 +13,8 @@
 
 
 import {
+    AdvertisementsApi,
+    AdvertisementCategoriesApi,
     AnnouncementsApi,
     DiscussionTopicsApi,
     InitiativesApi,
@@ -33,4 +35,6 @@ export interface Api {
     announcements: AnnouncementsApi
     initiatives: InitiativesApi
     devices: UserDevicesApi
+    advertisements: AdvertisementsApi
+    advertisementCategories: AdvertisementCategoriesApi
 }

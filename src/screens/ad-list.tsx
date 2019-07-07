@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 
 import { inject, observer } from 'mobx-react'
-import { SectionList, StyleSheet, Text } from 'react-native'
-import { FAB, TouchableRipple } from 'react-native-paper'
+import { View, SectionList, StyleSheet } from 'react-native'
+import { FAB, Card, Title, Paragraph } from 'react-native-paper'
 import ContentState from '../../components/content-state'
 import {
   renderEmptyView,
   renderErrorView,
 } from '../../components/design/flat-alert'
 import { NavigationStore } from '../../components/navigation/navigation-store'
-import { Ad } from '../services/api/ad'
+import { Advertisement, AdvertisementSubcategory } from '../services/api/api'
 import { AdStore } from '../stores/ad-store'
 import {
   emptyNavigationOptions,
@@ -18,7 +18,6 @@ import {
 import { T } from '../style/values'
 import { AdListViewModel } from '../view-models/ad-list'
 import { buttonProps } from '../views/button'
-import { routeToNote } from './note'
 
 const styles = StyleSheet.create({
   fab: {
@@ -28,11 +27,27 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  contentContainerStyle: {
+    paddingHorizontal: 20,
+    paddingTop: 5,
+    paddingBottom: 20,
+    backgroundColor: '#F8EEE4'
+  },
   item: {
-    paddingStart: T.spacing.default,
-    paddingEnd: T.spacing.default,
-    paddingTop: T.spacing.small,
-    paddingBottom: T.spacing.small,
+    marginTop: 15,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    elevation: 7,
+    borderRadius: 10
+  },
+  itemTitle: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  itemContent: {
+    paddingVertical: T.spacing.default,
+    paddingHorizontal: T.spacing.default
   },
 })
 
@@ -47,33 +62,40 @@ interface AdListProps {
 export class AdListScreen extends Component<AdListProps> {
   public static navigationOptions = emptyNavigationOptions
 
-  public static keyExtractor(item: Ad) {
+  public static keyExtractor(item: Advertisement) {
     return item.id.toString()
   }
 
-  public readonly viewModel = new AdListViewModel(this.props.adStore)
+  public readonly viewModel = new AdListViewModel(this.props.adStore, this.props.navigation.getParam('subcategoryId'))
 
-  public renderAdList = (noteList: Ad[]) => (
+  public renderAdList = (adList: Advertisement[]) => (
     <SectionList
-      sections={[{ data: noteList }]}
+      sections={[{ data: adList }]}
       renderItem={this.renderItem}
       keyExtractor={AdListScreen.keyExtractor}
+      contentContainerStyle={styles.contentContainerStyle}
+      endFillColor={styles.contentContainerStyle.backgroundColor}
     />
   )
 
-  public renderItem = ({ item }: { item: Ad }) => (
-    <TouchableRipple style={styles.item} onPress={this.routeToNote(item)}>
-      <Text>{item.title}</Text>
-    </TouchableRipple>
+  public renderItem = ({ item }: { item: Advertisement }) => (
+    <Card style={styles.item}>
+      <Card.Cover source={{ uri: item.image }} />
+
+      <Card.Content style={styles.itemContent}>
+        <View style={styles.itemTitle}>
+          <Title>{item.title}</Title>
+          {(!!item.price) &&
+            <Title>{item.price}</Title>
+          }
+        </View>
+      </Card.Content>
+
+      <Card.Content style={styles.itemContent}>
+        <Paragraph>{item.description}</Paragraph>
+      </Card.Content>
+    </Card>
   )
-
-  public routeToNote = (note: Ad) => () => {
-    routeToNote(this.props.navigationStore, note)
-  }
-
-  public routeToCreateAd = () => {
-    routeToNote(this.props.navigationStore)
-  }
 
   public render() {
     return (
@@ -105,9 +127,12 @@ export class AdListScreen extends Component<AdListProps> {
           style={styles.fab}
           icon="add"
           color={'white'}
-          onPress={this.routeToCreateAd}
         />
       </ScreenContainer>
     )
   }
+}
+
+export function routeToAdList(navStore: NavigationStore, subcategory?: AdvertisementSubcategory) {
+  navStore.navigateTo('AdList', subcategory ? { subcategoryId: subcategory.id } : null)
 }

@@ -12,6 +12,8 @@ import {
   MessagesApi, TOKEN_KEY,
   UserDevicesApi,
   UsersApi,
+  AdvertisementsApi,
+  AdvertisementCategoriesApi
 } from '../services/api'
 import { BASE_PATH, DEFAULT_HEADERS } from '../services/api/base'
 import { loadString } from '../../components/storage'
@@ -105,6 +107,8 @@ export async function createEnvironment(getToken: () => string) {
     announcements: new AnnouncementsApi(apiConfig),
     initiatives: new InitiativesApi(apiConfig),
     devices: new UserDevicesApi(apiConfig),
+    advertisements: new AdvertisementsApi(apiConfig),
+    advertisementCategories: new AdvertisementCategoriesApi(apiConfig)
   }
 
   // env.fcm = firebase.messaging()

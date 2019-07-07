@@ -2,6 +2,7 @@ import { Instance, SnapshotOut, types } from 'mobx-state-tree'
 import { getNavigationStoreModel } from '../../components/navigation/navigation-store'
 import { DEFAULT_STATE, RootNavigator } from '../navigation/root-navigator'
 import { AdStoreModel } from '../stores/ad-store'
+import { AdCategoryStoreModel } from '../stores/ad-categories-store'
 import { DiscussionStoreModel } from '../stores/discussion-store'
 import {UserStoreModel} from '../stores/user-store';
 
@@ -12,6 +13,7 @@ import {UserStoreModel} from '../stores/user-store';
 export const RootStoreModel = types.model('RootStore').props({
   navigationStore: getNavigationStoreModel(RootNavigator, DEFAULT_STATE),
   adStore: AdStoreModel,
+  adCategoryStore: AdCategoryStoreModel,
   discussionStore: DiscussionStoreModel,
   userStore: UserStoreModel,
 })
