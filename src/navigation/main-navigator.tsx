@@ -7,8 +7,9 @@ import {
 import { AdCategoryListScreen } from '../screens/ad-category-list'
 import { AdListScreen } from '../screens/ad-list'
 import { ChatScreen } from '../screens/chat'
-import { DiscussionListScreen } from '../screens/discussion-list'
 import { CreateDiscussionScreen } from '../screens/discussion-create'
+import { DiscussionListScreen } from '../screens/discussion-list'
+import { MapScreen } from '../screens/map'
 import { T } from '../style/values'
 
 const tabOptions = {
@@ -56,16 +57,16 @@ export const MainNavigator = observer(
         screen: createMaterialTopTabNavigator(
           {
             Chat: {
-                screen: ChatScreen,
-                navigationOptions: { title: 'Обсуждение' },
+              screen: ChatScreen,
+              navigationOptions: { title: 'Обсуждение' },
             },
             Vote: {
-                screen: AdListScreen,
-                navigationOptions: { title: 'Инициатива' },
+              screen: AdListScreen,
+              navigationOptions: { title: 'Инициатива' },
             },
             Process: {
-                screen: AdListScreen,
-                navigationOptions: { title: 'Процесс' },
+              screen: MapScreen,
+              navigationOptions: { title: 'Процесс' },
             },
           },
           tabOptions,
@@ -75,8 +76,8 @@ export const MainNavigator = observer(
         screen: AdListScreen,
       },
       CreateDiscussion: {
-        screen: CreateDiscussionScreen
-      }
+        screen: CreateDiscussionScreen,
+      },
     },
     {
       cardStyle: {
